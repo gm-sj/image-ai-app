@@ -3,6 +3,8 @@ import AppRoutes from './routes';
 import GlobalStyle from './common/global-styled';
 
 function App() {
+  console.log('husky test');
+
   return (
     <Router>
       <AppRoutes />
