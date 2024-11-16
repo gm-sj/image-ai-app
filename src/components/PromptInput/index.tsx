@@ -8,6 +8,8 @@ import styled from 'styled-components';
 
 interface PromptInputProps {
   aspectRatio: string;
+  height: string;
+  setAspectRatio: (newAspectRatio: string) => void;
 }
 
 const ModalStyle = styled(Dialog)`
@@ -22,7 +24,7 @@ const ModalStyle = styled(Dialog)`
   .modal-wrapper {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px;
     height: 100%;
@@ -38,7 +40,7 @@ const ModalStyle = styled(Dialog)`
         height: 100%;
         img {
           max-width: 100%;
-          height: auto;
+          height: 50vh;
         }
       }
       .contents-text {
@@ -46,7 +48,7 @@ const ModalStyle = styled(Dialog)`
         justify-content: space-between;
         align-items: center;
         padding: 0 20px;
-        margin-top: 20px;
+        margin-top: 40px;
         p {
           font-size: 16px;
           font-weight: 700;
@@ -63,6 +65,7 @@ const ModalStyle = styled(Dialog)`
           border-radius: 5px;
           font-weight: 700;
           cursor: pointer;
+          border: none;
           &.modal-btn-skyblue {
             background-color: var(--skyblue-color);
             color: var(--white-color);
@@ -82,12 +85,12 @@ const ModalStyle = styled(Dialog)`
   }
 `;
 
-const PromptInput: React.FC<PromptInputProps> = () => {
+const PromptInput: React.FC<PromptInputProps> = ({ aspectRatio, height, setAspectRatio }) => {
+  // Omit internal state for aspectRatio and height
   const [prompt, setPrompt] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [aspectRatio, setAspectRatio] = useState<string>('1/1'); // 비율 상태 추가
 
   const fetchImage = async (): Promise<void> => {
     try {
@@ -111,6 +114,15 @@ const PromptInput: React.FC<PromptInputProps> = () => {
     setImageUrl('');
   };
 
+  const imgDownload = () => {
+    if (!imageUrl) return;
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = '';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <PromptInputStyle>
       <div className="input-contents-wrapper">
@@ -140,7 +152,11 @@ const PromptInput: React.FC<PromptInputProps> = () => {
           ) : (
             <div className="modal-contents">
               <div className="modal-img-contents">
-                <img src={imageUrl} alt="Generated" style={{ aspectRatio: aspectRatio }} />
+                <img
+                  src={imageUrl}
+                  alt="Generated"
+                  style={{ aspectRatio: aspectRatio, height: height }}
+                />
               </div>
               <div className="contents-text">
                 <p>
@@ -152,7 +168,9 @@ const PromptInput: React.FC<PromptInputProps> = () => {
               </div>
               <div className="model-btn-wrapeer">
                 <button className="modal-btn-skyblue">메인에 업로드</button>
-                <button className="modal-btn-blue">다운로드</button>
+                <button className="modal-btn-blue" onClick={imgDownload}>
+                  다운로드
+                </button>
                 <button className="modal-btn-white" onClick={handleClose}>
                   닫기
                 </button>

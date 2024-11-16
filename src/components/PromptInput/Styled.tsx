@@ -45,6 +45,7 @@ export const PromptInputStyle = styled.div`
       color: #fff;
       font-size: 20px;
       cursor: pointer;
+      border: none;
       z-index: 1;
 
       &::before {
