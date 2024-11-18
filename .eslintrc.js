@@ -6,6 +6,8 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
+    ecmaVersion: 2021, // 최신 ECMAScript 버전 사용
+    sourceType: 'module',
   },
   extends: ['@rushstack/eslint-config/profile/web-app', '@rushstack/eslint-config/mixins/react'],
   rules: {

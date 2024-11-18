@@ -11,6 +11,7 @@ const ModalContainer = () => {
   }
 
   // 모달 컴포넌트를 포탈로 렌더링
+  /* 모달 배경을 여기서 설정. */
   return createPortal(
     <>{modalList.map((modal) => modal.component)}</>,
     document.getElementById('modal-root') as HTMLElement,
