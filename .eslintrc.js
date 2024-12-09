@@ -16,5 +16,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/naming-convention': 'off',
     '@rushstack/typedef-var': 'off', // 타입 추론을 허용하도록 규칙 비활성화
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
 };
