@@ -6,20 +6,21 @@ import { ModalContainerStyle } from './Styled';
 const ModalContainer = () => {
   const modalList = useContext(ModalStateContext);
   const setModalList = useContext(ModalSetterContext);
-  const [isClose, setIsClose] = useState(false);
+  const [isClose, setIsClose] = useState<'open' | 'close' | ''>('');
 
-  const closeModalList = () => {
-    setIsClose(true);
+  const closeModalList = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setIsClose('close');
 
-    setTimeout(() => {
-      setIsClose(false);
-      setModalList([]);
-    }, 300);
+      setTimeout(() => {
+        setModalList([]);
+      }, 300);
+    }
   };
 
   useEffect(() => {
     if (modalList.length > 0) {
-      setIsClose(true);
+      setIsClose('open');
     }
   }, [modalList]);
 
@@ -31,7 +32,7 @@ const ModalContainer = () => {
   // 모달 컴포넌트를 포탈로 렌더링
   /* 모달 배경을 여기서 설정. */
   return createPortal(
-    <ModalContainerStyle className={isClose ? 'close' : 'open'} onClick={closeModalList}>
+    <ModalContainerStyle className={isClose} onClick={closeModalList}>
       {modalList.map((modal) => (
         <React.Fragment key={modal.id}>{modal.component}</React.Fragment>
       ))}
