@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { ModalSetterContext, ModalStateContext } from '../../context/ModalProvider';
 import { createPortal } from 'react-dom';
 import { ModalContainerStyle } from './Styled';
@@ -6,21 +6,23 @@ import { ModalContainerStyle } from './Styled';
 const ModalContainer = () => {
   const modalList = useContext(ModalStateContext);
   const setModalList = useContext(ModalSetterContext);
-  const [isClose, setIsClose] = useState<'open' | 'close' | ''>('');
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const closeModalList = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      setIsClose('close');
-
+    if (e.target === e.currentTarget && modalRef.current) {
+      modalRef.current.classList.remove('open');
+      modalRef.current.classList.add('close'); // 애니메이션 클래스 추가
       setTimeout(() => {
         setModalList([]);
-      }, 300);
+      }, 300); // 애니메이션 지속 시간에 맞춰 모달 제거
     }
   };
 
   useEffect(() => {
-    if (modalList.length > 0) {
-      setIsClose('open');
+    if (modalRef.current && modalList.length > 0) {
+      setTimeout(() => {
+        modalRef.current?.classList.add('open');
+      }, 10);
     }
   }, [modalList]);
 
@@ -32,7 +34,7 @@ const ModalContainer = () => {
   // 모달 컴포넌트를 포탈로 렌더링
   /* 모달 배경을 여기서 설정. */
   return createPortal(
-    <ModalContainerStyle className={isClose} onClick={closeModalList}>
+    <ModalContainerStyle ref={modalRef} onClick={closeModalList}>
       {modalList.map((modal) => (
         <React.Fragment key={modal.id}>{modal.component}</React.Fragment>
       ))}
