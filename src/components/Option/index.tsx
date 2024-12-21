@@ -12,7 +12,7 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
 
   const fetchPromptFromGoogleAI = async () => {
     try {
-      const genAI = new GoogleGenerativeAI('AIzaSyDdRYnw510V_OuJJ1bGrclYQpGZtuG3gck');
+      const genAI = new GoogleGenerativeAI('');
       const model = genAI.getGenerativeModel({
         model: 'gemini-1.5-flash', // 사용할 모델
       });
