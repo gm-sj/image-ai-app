@@ -1,5 +1,4 @@
-// PromptInput.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PromptInputStyle } from './Styled';
 import Dialog from '@mui/material/Dialog';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -7,9 +6,10 @@ import AspectRatioSelector from '../AspectRatioSelector';
 import styled from 'styled-components';
 
 interface PromptInputProps {
-  aspectRatio: string;
   height: string;
+  aspectRatio: string;
   setAspectRatio: (newAspectRatio: string) => void;
+  generatedPrompt?: string;
 }
 
 const ModalStyle = styled(Dialog)`
@@ -85,12 +85,23 @@ const ModalStyle = styled(Dialog)`
   }
 `;
 
-const PromptInput: React.FC<PromptInputProps> = ({ aspectRatio, height, setAspectRatio }) => {
-  // Omit internal state for aspectRatio and height
-  const [prompt, setPrompt] = useState<string>('');
+const PromptInput: React.FC<PromptInputProps> = ({
+  aspectRatio,
+  setAspectRatio,
+  generatedPrompt = '',
+}) => {
+  const [prompt, setPrompt] = useState<string>(generatedPrompt);
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // `generatedPrompt` 값이 변경되면 `prompt` 업데이트
+  useEffect(() => {
+    if (generatedPrompt && generatedPrompt !== prompt) {
+      setPrompt(generatedPrompt);
+      console.log('Generated Prompt:', generatedPrompt); // 디버깅용 콘솔 출력
+    }
+  }, [generatedPrompt]);
 
   const fetchImage = async (): Promise<void> => {
     try {
@@ -123,12 +134,27 @@ const PromptInput: React.FC<PromptInputProps> = ({ aspectRatio, height, setAspec
     link.click();
     document.body.removeChild(link);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.ctrlKey) {
+      e.preventDefault();
+      fetchImage().catch((error) => console.error('Error in fetchImage:', error));
+    } else if (e.key === 'Enter' && e.ctrlKey) {
+      setPrompt((prev) => prev + '\n');
+    }
+  };
+
   return (
     <PromptInputStyle>
       <div className="input-contents-wrapper">
         <textarea
           value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setPrompt(newValue);
+            console.log('Updated Prompt Value:', newValue); // 콘솔 로그로 현재 값 출력
+          }}
+          onKeyDown={handleKeyDown}
           placeholder="AI가 생성할 내용에 대한 설명을 입력하세요"
         />
         <button onClick={fetchImage} type="submit">
@@ -152,11 +178,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ aspectRatio, height, setAspec
           ) : (
             <div className="modal-contents">
               <div className="modal-img-contents">
-                <img
-                  src={imageUrl}
-                  alt="Generated"
-                  style={{ aspectRatio: aspectRatio, height: height }}
-                />
+                <img src={imageUrl} alt="Generated" style={{ aspectRatio: aspectRatio }} />
               </div>
               <div className="contents-text">
                 <p>

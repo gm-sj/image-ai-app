@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
 import { OptionStyld } from './Styled';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface OptionProps {
   setAspectRatio: (ratio: string) => void;
+  onPromptGenerated: (prompt: string) => void;
 }
 
-const Option: React.FC<OptionProps> = ({ setAspectRatio }) => {
-  const [activeScreenRatio, setActiveScreenRatio] = useState<string | null>(null);
+const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
   const [activeImageCount, setActiveImageCount] = useState<number | null>(null);
 
-  const handleScreenRatioClick = (ratio: string) => {
-    setActiveScreenRatio(ratio);
-    setAspectRatio(ratio);
+  const fetchPromptFromGoogleAI = async () => {
+    try {
+      const genAI = new GoogleGenerativeAI('AIzaSyDdRYnw510V_OuJJ1bGrclYQpGZtuG3gck');
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash', // 사용할 모델
+      });
+
+      const prompt = 'AI가 이미지를 생성할 명령어를 추천해주세요.';
+      const result = await model.generateContent(prompt);
+
+      const generatedPrompt = result.response.text(); // 생성된 텍스트
+      console.log('추천 프롬프트:', generatedPrompt);
+
+      // 부모 컴포넌트로 전달
+      onPromptGenerated(generatedPrompt);
+    } catch (error) {
+      console.error('Google Generative AI 오류:', error);
+    }
   };
 
   return (
     <OptionStyld>
       <div className="option-wrapper">
-        <button className="select-item img-upload">
+        <button className="select-item img-upload" onClick={fetchPromptFromGoogleAI}>
           <span>프롬프트 추천</span>
         </button>
         <div className="select-item img-pcs">
