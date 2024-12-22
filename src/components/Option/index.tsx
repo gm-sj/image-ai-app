@@ -14,19 +14,22 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
     try {
       const genAI = new GoogleGenerativeAI('');
       const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash', // 사용할 모델
+        model: 'gemini-1.5-flash',
       });
 
       const prompt = 'AI가 이미지를 생성할 명령어를 추천해주세요.';
       const result = await model.generateContent(prompt);
 
-      const generatedPrompt = result.response.text(); // 생성된 텍스트
+      const generatedPrompt = result.response.text();
       console.log('추천 프롬프트:', generatedPrompt);
 
-      // 부모 컴포넌트로 전달
       onPromptGenerated(generatedPrompt);
     } catch (error) {
+      const fallbackPrompt = '프롬프트를 불러올 수 없습니다.';
       console.error('Google Generative AI 오류:', error);
+      console.log(fallbackPrompt);
+
+      onPromptGenerated(fallbackPrompt);
     }
   };
 

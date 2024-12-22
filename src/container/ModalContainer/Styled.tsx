@@ -23,4 +23,9 @@ export const ModalContainerStyle = styled.div`
   &.open {
     opacity: 1;
   }
+
+  .closeIndividualModal {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
 `;

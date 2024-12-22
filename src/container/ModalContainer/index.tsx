@@ -19,12 +19,12 @@ const ModalContainer = () => {
   };
 
   useEffect(() => {
-    if (modalRef.current && modalList.length > 0) {
+    if (modalRef.current && modalList.length > 0 && !modalRef.current.classList.contains('open')) {
       setTimeout(() => {
         modalRef.current?.classList.add('open');
       }, 10);
     }
-  }, [modalList]);
+  }, [modalList.length]);
 
   // 모달 리스트가 비어 있으면 아무것도 렌더링하지 않음
   if (modalList.length === 0) {
@@ -36,7 +36,9 @@ const ModalContainer = () => {
   return createPortal(
     <ModalContainerStyle ref={modalRef} onClick={closeModalList}>
       {modalList.map((modal) => (
-        <React.Fragment key={modal.id}>{modal.component}</React.Fragment>
+        <div className={modal?.isClosing ? 'closeIndividualModal' : ''} key={modal.id}>
+          {modal.component}
+        </div>
       ))}
     </ModalContainerStyle>,
     document.getElementById('modal-root') as HTMLElement,
