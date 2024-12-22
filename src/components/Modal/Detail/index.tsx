@@ -65,10 +65,7 @@ const DetailImage = () => {
           </div>
         </div>
       </ModalStyle>
-      <CommentModalStyle
-        openComment={openComment}
-        style={{ display: openComment ? 'flex' : 'none' }}
-      />
+      <CommentModalStyle openComment={openComment} />
     </div>
   );
 };

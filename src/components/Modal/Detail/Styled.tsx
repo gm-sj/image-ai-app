@@ -30,8 +30,8 @@ export const ModalStyle = styled.div<{ openComment: boolean }>`
   position: relative;
   padding: 40px 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: 0.2s ease-in;
-  right: 0%;
+  transition: 0.3s ease-in;
+  right: ${({ openComment }) => (openComment ? '0' : '-20%')};
   z-index: 2;
 `;
 
@@ -74,7 +74,7 @@ export const CommentModalStyle = styled.div<{ openComment: boolean }>`
   width: 40vw;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
-  border-radius: 0px 20px 20px 0;
+  border-radius: ${({ openComment }) => (openComment ? '0 20px 20px 0' : '20px')};
   display: flex;
   flex-direction: column;
   //justify-content: center;
@@ -82,7 +82,7 @@ export const CommentModalStyle = styled.div<{ openComment: boolean }>`
   position: relative;
   padding: 40px 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transition: 0.5s ease-in;
-  animation: ${FadeIn} 0.5s;
+  transition: 0.3s ease-in;
+  animation: ${FadeIn} 0.3s;
   right: ${({ openComment }) => (openComment ? '0' : '30%')};
 `;
