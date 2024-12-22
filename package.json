@@ -61,18 +61,5 @@
     "workerDirectory": [
       "public"
     ]
-  },
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": ".eslintrc.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gm-sj/image-ai-app.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gm-sj/image-ai-app/issues"
-  },
-  "homepage": "https://github.com/gm-sj/image-ai-app#readme"
+  }
 }
