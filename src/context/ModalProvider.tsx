@@ -3,6 +3,7 @@ import React, { createContext, ReactNode, useState } from 'react';
 interface Modal {
   id: string; // 고유한 식별자
   component: ReactNode; // 모달 컴포넌트
+  isClosing?: boolean;
 }
 
 interface ModalProviderProps {

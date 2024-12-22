@@ -21,7 +21,13 @@ const useModal = () => {
 
   // 모달 닫기 함수
   const closeModal = (id: string) => {
-    setModalList((prev) => prev.filter((modal) => modal.id !== id));
+    setModalList((prev) =>
+      prev.map((modal) => (modal.id === id ? { ...modal, isClosing: true } : modal)),
+    );
+
+    setTimeout(() => {
+      setModalList((prev) => prev.filter((modal) => modal.id !== id));
+    }, 400);
   };
 
   return { openModal, closeModal };

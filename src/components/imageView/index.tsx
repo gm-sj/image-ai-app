@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { ImageViewStyle } from './Styled';
+import useModal from '../../hooks/useModal';
+import { DetailImageModal } from '../Modal';
 
 const ImageView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('tab1');
+  const { openModal } = useModal();
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
+  };
+
+  const openDetailModal = () => {
+    openModal({
+      id: 'detailModal',
+      component: <DetailImageModal />,
+    });
   };
 
   return (
@@ -37,16 +47,18 @@ const ImageView: React.FC = () => {
             {activeTab === 'tab1' && (
               <div className="tab-pane">
                 <div className="grid-container">
-                  <div className="grid-item item1">탭1입니다</div>
-                  <div className="grid-item item2"></div>
-                  <div className="grid-item item3"></div>
-                  <div className="grid-item item4"></div>
-                  <div className="grid-item item5"></div>
-                  <div className="grid-item item6"></div>
-                  <div className="grid-item item7"></div>
-                  <div className="grid-item item8"></div>
-                  <div className="grid-item item9"></div>
-                  <div className="grid-item item10"></div>
+                  <div className="grid-item item1" onClick={openDetailModal}>
+                    탭1입니다
+                  </div>
+                  <div className="grid-item item2" />
+                  <div className="grid-item item3" />
+                  <div className="grid-item item4" />
+                  <div className="grid-item item5" />
+                  <div className="grid-item item6" />
+                  <div className="grid-item item7" />
+                  <div className="grid-item item8" />
+                  <div className="grid-item item9" />
+                  <div className="grid-item item10" />
                 </div>
               </div>
             )}
@@ -54,15 +66,15 @@ const ImageView: React.FC = () => {
               <div className="tab-pane">
                 <div className="grid-container">
                   <div className="grid-item item1">탭2입니다</div>
-                  <div className="grid-item item2"></div>
-                  <div className="grid-item item3"></div>
-                  <div className="grid-item item4"></div>
-                  <div className="grid-item item5"></div>
-                  <div className="grid-item item6"></div>
-                  <div className="grid-item item7"></div>
-                  <div className="grid-item item8"></div>
-                  <div className="grid-item item9"></div>
-                  <div className="grid-item item10"></div>
+                  <div className="grid-item item2" />
+                  <div className="grid-item item3" />
+                  <div className="grid-item item4" />
+                  <div className="grid-item item5" />
+                  <div className="grid-item item6" />
+                  <div className="grid-item item7" />
+                  <div className="grid-item item8" />
+                  <div className="grid-item item9" />
+                  <div className="grid-item item10" />
                 </div>
               </div>
             )}
@@ -70,15 +82,15 @@ const ImageView: React.FC = () => {
               <div className="tab-pane">
                 <div className="grid-container">
                   <div className="grid-item item1">탭3입니다</div>
-                  <div className="grid-item item2"></div>
-                  <div className="grid-item item3"></div>
-                  <div className="grid-item item4"></div>
-                  <div className="grid-item item5"></div>
-                  <div className="grid-item item6"></div>
-                  <div className="grid-item item7"></div>
-                  <div className="grid-item item8"></div>
-                  <div className="grid-item item9"></div>
-                  <div className="grid-item item10"></div>
+                  <div className="grid-item item2" />
+                  <div className="grid-item item3" />
+                  <div className="grid-item item4" />
+                  <div className="grid-item item5" />
+                  <div className="grid-item item6" />
+                  <div className="grid-item item7" />
+                  <div className="grid-item item8" />
+                  <div className="grid-item item9" />
+                  <div className="grid-item item10" />
                 </div>
               </div>
             )}
