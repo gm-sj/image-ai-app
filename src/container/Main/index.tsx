@@ -9,15 +9,26 @@ import Footer from '../../components/Footer';
 const Main: React.FC = () => {
   const [aspectRatio, setAspectRatio] = useState<string>('1/1');
   const [height, setHeight] = useState<string>('50vh');
+  const [prompt, setPrompt] = useState<string>(''); // 프롬프트 상태 추가
 
   const handleSetAspectRatio = (newAspectRatio: string) => {
     setAspectRatio(newAspectRatio);
 
-    if (newAspectRatio === '16/9') {
-      setHeight('auto');
-    } else {
-      setHeight('50vh');
+    switch (newAspectRatio) {
+      case '16/9':
+        setHeight('56.25vh');
+        break;
+      case '4/3':
+        setHeight('75vh');
+        break;
+      case '1/1':
+      default:
+        setHeight('50vh');
     }
+  };
+
+  const handlePromptGenerated = (generatedPrompt: string) => {
+    setPrompt(generatedPrompt);
   };
 
   return (
@@ -31,10 +42,14 @@ const Main: React.FC = () => {
           </div>
           <PromptInput
             aspectRatio={aspectRatio}
-            height={height} // height 전달
+            height={height}
             setAspectRatio={handleSetAspectRatio}
+            generatedPrompt={prompt}
           />
-          <Option setAspectRatio={handleSetAspectRatio} />
+          <Option
+            setAspectRatio={handleSetAspectRatio}
+            onPromptGenerated={handlePromptGenerated} // 추가된 prop
+          />
           <ImageView />
         </section>
       </main>

@@ -21,6 +21,7 @@ export const OptionStyld = styled.div`
       position: relative;
       padding: 5px 20px;
       gap: 5px;
+      cursor: pointer;
 
       &.img-upload {
         border: 1px solid var(--gray-color);
@@ -63,6 +64,7 @@ export const OptionStyld = styled.div`
           width: 15px;
           height: 15px;
           background-color: var(--blue-color);
+          cursor: pointer;
         }
       }
     }
