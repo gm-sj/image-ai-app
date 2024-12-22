@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { HeaderStyle } from './Styled';
 
+// image
+
+import Logo from '../../common/images/logo.png';
+
 const Headers: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -25,7 +29,7 @@ const Headers: React.FC = () => {
       <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
         <div className="menu-item-wrapper">
           <div className="title-wrapper">
-            <h1>로고</h1>
+            <img src={Logo} width={130} height={50} />
           </div>
 
           <nav className="web-nav-list-wrapper">
@@ -37,9 +41,9 @@ const Headers: React.FC = () => {
           </nav>
           <nav className="mobile-nav-list-wrapper">
             <div className={`mobile-menu-btn ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-              <span></span>
-              <span></span>
-              <span></span>
+              <span />
+              <span />
+              <span />
             </div>
             <ul className={`menu-area ${isMenuOpen ? 'open' : ''}`}>
               <li>best</li>

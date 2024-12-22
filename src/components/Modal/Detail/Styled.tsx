@@ -29,7 +29,7 @@ export const ModalStyle = styled.div<{ openComment: boolean }>`
   align-items: center;
   position: relative;
   padding: 40px 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: ${({ openComment }) => (openComment ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
   transition: 0.3s ease-in;
   right: ${({ openComment }) => (openComment ? '0' : '-25%')};
   z-index: 2;
