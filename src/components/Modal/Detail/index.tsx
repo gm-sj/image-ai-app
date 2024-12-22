@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CloseButton, ImageWrapper, ModalStyle } from './Styled';
+import { CloseButton, ImageWrapper, ModalStyle, CommentModalStyle } from './Styled';
 import useModal from '../../../hooks/useModal';
 
 interface ImageData {
@@ -13,6 +13,7 @@ const DetailImage = () => {
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [openComment, setOpenComment] = useState<boolean>(false);
 
   const fetchData = async (): Promise<void> => {
     try {
@@ -32,6 +33,10 @@ const DetailImage = () => {
     }
   };
 
+  const openDescription = () => {
+    setOpenComment(!openComment);
+  };
+
   // 데이터 가져오기
   useEffect(() => {
     fetchData().catch((err) => console.error(err));
@@ -42,16 +47,29 @@ const DetailImage = () => {
   if (!imageData) return <p>데이터를 불러오는 데 실패했습니다.</p>;
 
   return (
-    <ModalStyle>
-      {/* 닫기 버튼 */}
-      <CloseButton onClick={() => closeModal('detailModal')}>✖</CloseButton>
+    <div style={{ display: 'flex' }}>
+      <ModalStyle openComment={openComment}>
+        <div className="modal-header">
+          {/* 닫기 버튼 */}
+          <CloseButton onClick={() => closeModal('detailModal')}>✖</CloseButton>
+        </div>
 
-      {/* 이미지와 설명 */}
-      <ImageWrapper>
-        <img src={imageData.imageUrl} alt={imageData.description} />
-        <p className="description">{imageData.description}</p>
-      </ImageWrapper>
-    </ModalStyle>
+        <div className="modal-body">
+          {/* 이미지와 설명 */}
+          <ImageWrapper>
+            <img src={imageData.imageUrl} alt={imageData.description} />
+            <p className="description">{imageData.description}</p>
+          </ImageWrapper>
+          <div>
+            <button onClick={openDescription}>{openComment ? '닫기' : '상세보기'}</button>
+          </div>
+        </div>
+      </ModalStyle>
+      <CommentModalStyle
+        openComment={openComment}
+        style={{ display: openComment ? 'flex' : 'none' }}
+      />
+    </div>
   );
 };
 

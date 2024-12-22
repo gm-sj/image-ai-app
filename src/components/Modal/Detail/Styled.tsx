@@ -1,6 +1,16 @@
 import styled from 'styled-components';
+import { keyframes } from 'styled-components';
 
-export const ModalStyle = styled.div`
+const FadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+export const ModalStyle = styled.div<{ openComment: boolean }>`
   /* width: 45vw;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
@@ -12,14 +22,17 @@ export const ModalStyle = styled.div`
   width: 40vw;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
-  border-radius: 20px;
+  border-radius: ${({ openComment }) => (openComment ? '20px 0 0 20px' : '20px')};
   display: flex;
   flex-direction: column;
   //justify-content: center;
   align-items: center;
   position: relative;
-  padding: 20px;
+  padding: 40px 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.2s ease-in;
+  right: 0%;
+  z-index: 2;
 `;
 
 export const CloseButton = styled.button`
@@ -41,7 +54,6 @@ export const ImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 30%;
 
   img {
     max-width: 100%;
@@ -56,4 +68,21 @@ export const ImageWrapper = styled.div`
     text-align: center;
     margin-top: 10px;
   }
+`;
+
+export const CommentModalStyle = styled.div<{ openComment: boolean }>`
+  width: 40vw;
+  height: calc(100vh - 50px);
+  background-color: rgb(39, 39, 42);
+  border-radius: 0px 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  //justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 40px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.5s ease-in;
+  animation: ${FadeIn} 0.5s;
+  right: ${({ openComment }) => (openComment ? '0' : '30%')};
 `;
