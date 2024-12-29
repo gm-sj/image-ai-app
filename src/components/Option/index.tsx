@@ -11,13 +11,22 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
   const [activeImageCount, setActiveImageCount] = useState<number | null>(null);
 
   const fetchPromptFromGoogleAI = async () => {
+    const API_KEY = process.env.REACT_APP_GEMINI_KEY;
+
+    if (!API_KEY) {
+      console.error('API 키가 설정되지 않았습니다.');
+      onPromptGenerated('프롬프트를 불러올 수 없습니다.');
+      return;
+    }
+
     try {
-      const genAI = new GoogleGenerativeAI('');
+      const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
+        model: 'gemini-2.0-flash-exp',
       });
 
-      const prompt = 'AI가 이미지를 생성할 명령어를 추천해주세요.';
+      const prompt =
+        'Please answer in Korean and provide just one result. Make a short and creative prompt for AI image generation. Just give me the result value instead';
       const result = await model.generateContent(prompt);
 
       const generatedPrompt = result.response.text();
