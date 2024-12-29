@@ -31,10 +31,14 @@ const ModalStyle = styled(Dialog)`
     .modal-contents {
       width: 100%;
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
       .modal-img-contents {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         gap: 20px;
         height: 100%;

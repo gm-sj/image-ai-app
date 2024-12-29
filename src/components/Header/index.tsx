@@ -32,13 +32,7 @@ const Headers: React.FC = () => {
             <img src={Logo} width={130} height={50} />
           </div>
 
-          <nav className="web-nav-list-wrapper">
-            <ul>
-              <li>best</li>
-              <li>worst</li>
-              <li>top5</li>
-            </ul>
-          </nav>
+          <nav className="web-nav-list-wrapper" />
           <nav className="mobile-nav-list-wrapper">
             <div className={`mobile-menu-btn ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
               <span />
