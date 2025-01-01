@@ -51,13 +51,12 @@ const DetailImage = () => {
   if (!imageData) return <p>데이터를 불러오는 데 실패했습니다.</p>;
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', width: '40vw' }}>
       <ModalStyle openComment={openComment}>
         <div className="modal-header">
           {/* 닫기 버튼 */}
           <CloseButton onClick={() => closeModal('detailModal')}>✖</CloseButton>
         </div>
-
         <div className="modal-body">
           {/* 이미지와 설명 */}
           <ImageWrapper>

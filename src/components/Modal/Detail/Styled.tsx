@@ -19,7 +19,8 @@ export const ModalStyle = styled.div<{ openComment: boolean }>`
   justify-content: space-between;
   align-items: center; */
 
-  width: 40vw;
+  width: 100%;
+  flex-shrink: 0;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
   border-radius: ${({ openComment }) => (openComment ? '20px 0 0 20px' : '20px')};
@@ -30,7 +31,7 @@ export const ModalStyle = styled.div<{ openComment: boolean }>`
   padding: 40px 30px;
   box-shadow: ${({ openComment }) => (openComment ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
   transition: 0.3s ease-in;
-  right: ${({ openComment }) => (openComment ? '0' : '-25%')};
+  right: ${({ openComment }) => (openComment ? '50%' : '0')};
   z-index: 2;
 
   .button-box {
@@ -81,7 +82,8 @@ export const ImageWrapper = styled.div`
 `;
 
 export const CommentModalStyle = styled.div<{ openComment: boolean }>`
-  width: 40vw;
+  width: 100%;
+  flex-shrink: 0;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
   border-radius: ${({ openComment }) => (openComment ? '0 20px 20px 0' : '20px')};
@@ -94,7 +96,7 @@ export const CommentModalStyle = styled.div<{ openComment: boolean }>`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transition: 0.3s ease-in;
   animation: ${FadeIn} 0.3s;
-  right: ${({ openComment }) => (openComment ? '0' : '25%')};
+  right: ${({ openComment }) => (openComment ? '50%' : '100%')};
 
   .comment-add {
     width: 100%;
