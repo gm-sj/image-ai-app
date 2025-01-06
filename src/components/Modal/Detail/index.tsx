@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CloseButton, ImageWrapper, ModalStyle, CommentModalStyle } from './Styled';
 import useModal from '../../../hooks/useModal';
+import { Button } from '@mui/material';
 
 interface ImageData {
   id: string;
@@ -9,11 +10,14 @@ interface ImageData {
 }
 
 const DetailImage = () => {
+  // img
   const { closeModal } = useModal();
   const [imageData, setImageData] = useState<ImageData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [openComment, setOpenComment] = useState<boolean>(false);
+  // comment
+  const [commentValue, setCommentValue] = useState<string | null>(null);
 
   const fetchData = async (): Promise<void> => {
     try {
@@ -47,25 +51,64 @@ const DetailImage = () => {
   if (!imageData) return <p>데이터를 불러오는 데 실패했습니다.</p>;
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', width: '40vw' }}>
       <ModalStyle openComment={openComment}>
         <div className="modal-header">
           {/* 닫기 버튼 */}
           <CloseButton onClick={() => closeModal('detailModal')}>✖</CloseButton>
         </div>
-
         <div className="modal-body">
           {/* 이미지와 설명 */}
           <ImageWrapper>
             <img src={imageData.imageUrl} alt={imageData.description} />
             <p className="description">{imageData.description}</p>
           </ImageWrapper>
-          <div>
-            <button onClick={openDescription}>{openComment ? '닫기' : '상세보기'}</button>
+          <div className="button-box">
+            <Button variant="contained" onClick={openDescription}>
+              {openComment ? '닫기' : '상세보기'}
+            </Button>
           </div>
         </div>
       </ModalStyle>
-      <CommentModalStyle openComment={openComment} />
+      <CommentModalStyle openComment={openComment}>
+        <div className="comment-add">
+          <textarea
+            onChange={(e) => {
+              setCommentValue(e.target.value);
+            }}
+          />
+          <Button variant="contained">등록하기</Button>
+        </div>
+        <ul className="comment-list">
+          <li>
+            <p>댓글내용</p>
+            <div className="button-box">
+              <Button variant="contained">수정하기</Button>
+              <Button color="error" variant="outlined">
+                삭제하기
+              </Button>
+            </div>
+          </li>
+          <li>
+            <p>댓글내용</p>
+            <div className="button-box">
+              <Button variant="contained">수정하기</Button>
+              <Button color="error" variant="outlined">
+                삭제하기
+              </Button>
+            </div>
+          </li>
+          <li>
+            <p>댓글내용</p>
+            <div className="button-box">
+              <Button variant="contained">수정하기</Button>
+              <Button color="error" variant="outlined">
+                삭제하기
+              </Button>
+            </div>
+          </li>
+        </ul>
+      </CommentModalStyle>
     </div>
   );
 };
