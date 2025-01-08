@@ -26,7 +26,7 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
       });
 
       const prompt =
-        'Please answer in Korean and provide just one result. Make a short and creative prompt for AI image generation. Just give me the result value instead';
+        'Make a short and creative prompt for AI image generation. Just give me the result value instead';
       const result = await model.generateContent(prompt);
 
       const generatedPrompt = result.response.text();

@@ -131,12 +131,43 @@ const PromptInput: React.FC<PromptInputProps> = ({
 
   const imgDownload = () => {
     if (!imageUrl) return;
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = '';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous'; // CORS 설정
+    img.src = imageUrl;
+
+    img.onload = () => {
+      const [widthRatio, heightRatio] = aspectRatio.split('/').map(Number);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      if (!ctx) return;
+
+      // 이미지의 새 크기 계산
+      const newWidth = img.width;
+      const newHeight = (newWidth * heightRatio) / widthRatio;
+
+      // 캔버스 크기 설정
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+
+      // 캔버스에 이미지 그리기
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      try {
+        // 캔버스를 데이터 URL로 변환
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png'); // PNG 포맷으로 다운로드
+        link.download = 'resized-image.png';
+        link.click();
+      } catch (error) {
+        console.error('이미지를 다운로드하는 데 실패했습니다:', error);
+      }
+    };
+
+    img.onerror = () => {
+      console.error('이미지를 로드하는 데 실패했습니다.');
+    };
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
