@@ -4,6 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import CircularProgress from '@mui/material/CircularProgress';
 import AspectRatioSelector from '../AspectRatioSelector';
 import styled from 'styled-components';
+import { uploadImageFromUrl } from '../../firebase/config';
 
 interface PromptInputProps {
   height: string;
@@ -129,14 +130,23 @@ const PromptInput: React.FC<PromptInputProps> = ({
     setImageUrl('');
   };
 
-  const imgDownload = () => {
+  const imgDownload = async () => {
     if (!imageUrl) return;
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = '';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    uploadImageFromUrl(imageUrl, '테스트')
+      .then(() => {
+        console.log('이미지 업로드 성공2');
+      })
+      .catch((error) => {
+        console.error('이미지 업로드 실패2:', error);
+      });
+
+    // const link = document.createElement('a');
+    // link.href = imageUrl;
+    // link.download = '';
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
