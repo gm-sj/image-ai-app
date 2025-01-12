@@ -4,6 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import CircularProgress from '@mui/material/CircularProgress';
 import AspectRatioSelector from '../AspectRatioSelector';
 import styled from 'styled-components';
+import { uploadImageFromUrl } from '../../firebase/config';
 
 interface PromptInputProps {
   height: string;
@@ -129,6 +130,25 @@ const PromptInput: React.FC<PromptInputProps> = ({
     setImageUrl('');
   };
 
+  const imgUpload = async () => {
+    if (!imageUrl) return;
+
+    uploadImageFromUrl(imageUrl, '테스트')
+      .then(() => {
+        console.log('이미지 업로드 성공2');
+      })
+      .catch((error) => {
+        console.error('이미지 업로드 실패2:', error);
+      });
+
+    // const link = document.createElement('a');
+    // link.href = imageUrl;
+    // link.download = '';
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+  };
+
   const imgDownload = () => {
     if (!imageUrl) return;
 
@@ -224,7 +244,9 @@ const PromptInput: React.FC<PromptInputProps> = ({
                 <AspectRatioSelector setAspectRatio={setAspectRatio} />
               </div>
               <div className="model-btn-wrapeer">
-                <button className="modal-btn-skyblue">메인에 업로드</button>
+                <button className="modal-btn-skyblue" onClick={imgUpload}>
+                  메인에 업로드
+                </button>
                 <button className="modal-btn-blue" onClick={imgDownload}>
                   다운로드
                 </button>

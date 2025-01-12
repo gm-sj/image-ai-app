@@ -67,7 +67,7 @@ export const ImageViewStyle = styled.div`
           background: rgba(0, 0, 0, 0.4);
           transition: transform 0.5s ease;
           border-radius: 14px;
-          z-index: -1;
+          z-index: 0;
           transform: translateY(200%);
           transform-origin: bottom;
         }
@@ -82,6 +82,7 @@ export const ImageViewStyle = styled.div`
 
       .item2 {
         grid-area: item2;
+        height: 270px;
       }
 
       .item3 {
@@ -91,6 +92,7 @@ export const ImageViewStyle = styled.div`
 
       .item4 {
         grid-area: item4;
+        height: 270px;
       }
 
       .item5 {
