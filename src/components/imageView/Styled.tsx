@@ -1,4 +1,13 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 export const ImageViewStyle = styled.div`
   width: 100%;
@@ -53,6 +62,7 @@ export const ImageViewStyle = styled.div`
         transition: transform 0.3s;
         cursor: pointer;
         position: relative;
+        animation: ${fadeIn} 2s ease-in-out;
 
         &:hover {
           transform: scale(1.05);

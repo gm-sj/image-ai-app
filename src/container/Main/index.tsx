@@ -47,7 +47,6 @@ const Main: React.FC = () => {
             generatedPrompt={prompt}
           />
           <Option
-            setAspectRatio={handleSetAspectRatio}
             onPromptGenerated={handlePromptGenerated} // 추가된 prop
           />
           <ImageView />

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ImageViewStyle } from './Styled';
 import useModal from '../../hooks/useModal';
 import { DetailImageModal } from '../Modal';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { onSnapshot, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
 interface ImageData {
@@ -29,36 +29,48 @@ const ImageView: React.FC = () => {
     });
   };
 
-  const fetchImages = async () => {
+  const fetchImages = () => {
     try {
       const imageCollection = collection(db, 'images');
       const q = query(imageCollection, orderBy('createdAt', 'desc'), limit(10));
-      const snapshot = await getDocs(q);
 
-      const imageData = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        console.log('Fetched Data:', data); // 로그 추가
-        if (data && data.url) {
-          return {
-            id: doc.id,
-            url: data.url,
-            description: data.description || 'No description',
-          };
-        } else {
-          console.warn('Missing "url" field:', doc.id, data);
-          return null;
-        }
+      // Firestore 실시간 업데이트 구독
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const imageData = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          console.log('Realtime Fetched Data:', data); // 실시간 데이터 로그
+          if (data && data.url) {
+            return {
+              id: doc.id,
+              url: data.url,
+              description: data.description || 'No description',
+            };
+          } else {
+            console.warn('Missing "url" field:', doc.id, data);
+            return null;
+          }
+        });
+
+        const validImages = imageData.filter((image): image is ImageData => image !== null);
+        setImages(validImages);
       });
 
-      const validImages = imageData.filter((image): image is ImageData => image !== null);
-      setImages(validImages);
+      // 반환된 unsubscribe 함수를 통해 구독 해제 가능
+      return unsubscribe;
     } catch (error) {
-      console.error('Error fetching images:', error);
+      console.error('Error fetching images in real-time:', error);
+      return () => {}; // 오류 발생 시 빈 함수 반환
     }
   };
 
   useEffect(() => {
-    fetchImages().catch((error) => console.error('Error in fetchImages:', error));
+    // fetchImages 함수 호출하여 실시간 구독 시작
+    const unsubscribe = fetchImages();
+
+    // 컴포넌트 언마운트 시 구독 해제
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (

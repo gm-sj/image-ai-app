@@ -136,6 +136,7 @@ const PromptInput: React.FC<PromptInputProps> = ({
     uploadImageFromUrl(imageUrl, '테스트')
       .then(() => {
         console.log('이미지 업로드 성공2');
+        handleClose();
       })
       .catch((error) => {
         console.error('이미지 업로드 실패2:', error);
