@@ -3,7 +3,6 @@ import styled from 'styled-components';
 export const PromptInputStyle = styled.div`
   width: 100%;
   .input-contents-wrapper {
-    margin-top: 35px;
     display: flex;
     flex-direction: row;
     gap: 10px;

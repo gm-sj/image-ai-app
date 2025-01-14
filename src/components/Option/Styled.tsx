@@ -6,12 +6,10 @@ export const OptionStyld = styled.div`
     display: flex;
     flex-direction: row;
     padding: 0 20px;
-    gap: 10px;
     width: 100%;
     justify-content: flex-start;
     align-items: center;
     font-size: 12px;
-    gap: 20px;
     .select-item {
       display: flex;
       flex-direction: row;
@@ -24,9 +22,31 @@ export const OptionStyld = styled.div`
       cursor: pointer;
 
       &.img-upload {
-        border: 1px solid var(--blue-color);
-        background-color: var(--white-color);
+        border: none;
+        background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
+        transition: transform 0.5s ease;
         border-radius: 15px;
+        color: var(--white-color);
+        cursor: pointer;
+        z-index: 1;
+        overflow: hidden;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to top, var(--skyblue-color) 100%, var(--blue-color) 0%);
+          transition: transform 0.5s ease;
+          border-radius: 15px;
+          z-index: -1;
+          transform: scaleY(1);
+          transform-origin: top;
+        }
+        &:hover::before {
+          transform: scaleY(0);
+        }
       }
     }
   }

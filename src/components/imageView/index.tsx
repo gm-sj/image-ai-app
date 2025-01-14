@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ImageViewStyle } from './Styled';
 import useModal from '../../hooks/useModal';
 import { DetailImageModal } from '../Modal';
+import CircularProgress from '@mui/material/CircularProgress';
 import { onSnapshot, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 
@@ -117,8 +118,16 @@ const ImageView: React.FC = () => {
                         </div>
                       ))
                     : Array.from({ length: 10 }).map((_, index) => (
-                        <div className={`grid-item item${index + 1}`} key={index}>
-                          <p style={{ textAlign: 'center', padding: '10px' }}>이미지 없음</p>
+                        <div
+                          className={`grid-item item${index + 1}`}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          key={index}
+                        >
+                          <CircularProgress />
                         </div>
                       ))}
                 </div>

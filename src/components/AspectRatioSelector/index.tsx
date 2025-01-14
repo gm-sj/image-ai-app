@@ -1,9 +1,11 @@
+import React from 'react';
 import { SelectorStyle } from './Styled';
-interface OptionProps {
+
+interface AspectRatioSelectorProps {
   setAspectRatio: (newAspectRatio: string) => void;
 }
 
-const Option: React.FC<OptionProps> = ({ setAspectRatio }) => {
+const AspectRatioSelector: React.FC<AspectRatioSelectorProps> = ({ setAspectRatio }) => {
   return (
     <SelectorStyle>
       <button onClick={() => setAspectRatio('1/1')}>1:1</button>
@@ -13,4 +15,4 @@ const Option: React.FC<OptionProps> = ({ setAspectRatio }) => {
   );
 };
 
-export default Option;
+export default AspectRatioSelector;

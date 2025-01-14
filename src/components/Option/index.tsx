@@ -3,7 +3,6 @@ import { OptionStyld } from './Styled';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface OptionProps {
-  setAspectRatio: (ratio: string) => void;
   onPromptGenerated: (prompt: string) => void;
 }
 
@@ -11,7 +10,7 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
   const [activeImageCount, setActiveImageCount] = useState<number | null>(null);
 
   const fetchPromptFromGoogleAI = async () => {
-    const API_KEY = process.env.REACT_APP_GEMINI_KEY;
+    const API_KEY = 'AIzaSyDQBp8yEmeT9f-eu4NpU3qWNVQxTYvsy9g';
 
     if (!API_KEY) {
       console.error('API 키가 설정되지 않았습니다.');
@@ -48,27 +47,6 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
         <button className="select-item img-upload" onClick={fetchPromptFromGoogleAI}>
           <span>프롬프트 추천</span>
         </button>
-        <div className="select-item img-pcs">
-          이미지갯수
-          <div
-            className={`ratio-item ${activeImageCount === 1 ? 'active' : ''}`}
-            onClick={() => setActiveImageCount(1)}
-          >
-            1
-          </div>
-          <div
-            className={`ratio-item ${activeImageCount === 2 ? 'active' : ''}`}
-            onClick={() => setActiveImageCount(2)}
-          >
-            2
-          </div>
-          <div
-            className={`ratio-item ${activeImageCount === 3 ? 'active' : ''}`}
-            onClick={() => setActiveImageCount(3)}
-          >
-            3
-          </div>
-        </div>
       </div>
     </OptionStyld>
   );
