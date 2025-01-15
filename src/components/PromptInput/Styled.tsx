@@ -18,7 +18,7 @@ export const PromptInputStyle = styled.div`
       padding: 14px 18px;
       background: var(--white-color);
       border: 2px solid var(--skyblue-color);
-      border-radius: 14px;
+      border-radius: 15px;
       resize: none;
       outline: none;
       transition: border 1s ease;
@@ -40,7 +40,7 @@ export const PromptInputStyle = styled.div`
       height: 100px;
       margin: 0 auto;
       background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
-      border-radius: 14px;
+      border-radius: 15px;
       color: #fff;
       font-size: 20px;
       cursor: pointer;
@@ -55,7 +55,7 @@ export const PromptInputStyle = styled.div`
         height: 100%;
         background: linear-gradient(to top, var(--skyblue-color) 100%, var(--blue-color) 0%);
         transition: transform 0.5s ease;
-        border-radius: 14px;
+        border-radius: 15px;
         z-index: -1;
         transform: scaleY(1);
         transform-origin: bottom;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import AspectRatioSelector from '../../AspectRatioSelector';
-import { ModalWrapper, ModalContent } from './Styled';
+import { ModalWrapper, ModalContent, CommentModalStyle } from './Styled';
 import { uploadImageFromUrl } from '../../../firebase/config';
 import useModal from '../../../hooks/useModal';
 
@@ -13,6 +13,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
   const [aspectRatio, setAspectRatio] = useState<string>('1/1');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [openSideModal, setOpenSideModal] = useState<boolean>(false);
   const { closeModal } = useModal();
 
   // 이미지 로드
@@ -74,9 +75,13 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
     };
   };
 
+  const toggleModalSide = () => {
+    setOpenSideModal(!openSideModal);
+  };
+
   return (
     <ModalWrapper>
-      <ModalContent key={aspectRatio}>
+      <ModalContent openSideModal={openSideModal}>
         {isLoading ? (
           <CircularProgress sx={{ color: '#005bea' }} />
         ) : (
@@ -84,7 +89,6 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
             {imageUrl ? (
               <div className="modal-img-contents">
                 <img src={imageUrl} alt="Generated" style={{ aspectRatio }} />
-                <p>{aspectRatio}</p>
               </div>
             ) : (
               <p>이미지를 불러오는 데 실패했습니다.</p>
@@ -96,11 +100,11 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
                   <br />
                   버튼을 눌러 비율을 맞춰주세요
                 </p>
-                <AspectRatioSelector setAspectRatio={setAspectRatio} />
+                <AspectRatioSelector setAspectRatio={setAspectRatio} aspectRatio={aspectRatio} />
               </div>
               <div className="model-btn-wrapeer">
-                <button className="modal-btn-skyblue" onClick={handleImgUpload}>
-                  메인에 업로드
+                <button className="modal-btn-skyblue" onClick={toggleModalSide}>
+                  타이틀지정하기
                 </button>
                 <button className="modal-btn-blue" onClick={handleImgDownload}>
                   다운로드
@@ -113,6 +117,27 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
           </div>
         )}
       </ModalContent>
+      <CommentModalStyle openSideModal={openSideModal}>
+        <div className="info-area">
+          <div className="introduce">
+            <p>제목과 정보를 입력해주세요</p>
+            <p className="small">
+              제목과 정보를 입력 후 업로드 될시 해당 정보는 서버에 올라갑니다.
+            </p>
+          </div>
+          <div className="form">
+            <label>제목</label>
+            <input className="title-input" type="text" placeholder="제목을 입력해주세요" />
+          </div>
+          <div className="form">
+            <label>내용</label>
+            <textarea className="desciption-area" placeholder="내용을 입력해주세요" />
+          </div>
+        </div>
+        <button className="upload-btn" onClick={handleImgUpload}>
+          메인에 업로드
+        </button>
+      </CommentModalStyle>
     </ModalWrapper>
   );
 };

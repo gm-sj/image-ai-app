@@ -76,7 +76,7 @@ export const ImageViewStyle = styled.div`
           height: 100%;
           background: rgba(0, 0, 0, 0.4);
           transition: transform 0.5s ease;
-          border-radius: 14px;
+          border-radius: 15px;
           z-index: 0;
           transform: translateY(200%);
           transform-origin: bottom;

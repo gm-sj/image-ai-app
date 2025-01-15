@@ -13,18 +13,21 @@ export const ModalWrapper = styled.div`
   z-index: 1000;
 `;
 
-export const ModalContent = styled.div`
+export const ModalContent = styled.div<{ openSideModal: boolean }>`
   background-color: rgb(39, 39, 42);
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 20px;
   height: calc(100vh - 50px);
   max-width: 640px;
-  width: 100%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-  position: relative;
+  width: 40vw;
+  box-shadow: ${({ openSideModal }) => (openSideModal ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
+  border-radius: ${({ openSideModal }) => (openSideModal ? '20px 0 0 20px' : '20px')};
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s ease-in;
+  left: ${({ openSideModal }) => (openSideModal ? '0%' : '25%')};
+  position: relative;
   .modal-contents {
     width: 100%;
     display: flex;
@@ -83,6 +86,133 @@ export const ModalContent = styled.div`
           border: 1px solid var(--gray-color);
         }
       }
+    }
+  }
+`;
+
+export const CommentModalStyle = styled.div<{ openSideModal: boolean }>`
+  width: 40vw;
+  flex-shrink: 0;
+  height: calc(100vh - 50px);
+  background-color: rgb(39, 39, 42);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: ${({ openSideModal }) => (openSideModal ? '0 20px 20px 0' : '20px')};
+  align-items: center;
+  padding: 40px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s ease-in;
+  position: relative;
+  z-index: -1;
+  right: ${({ openSideModal }) => (openSideModal ? '0%' : '15.5%')};
+  .introduce {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--white-color);
+    p {
+      font-size: 21px;
+      font-weight: 700;
+    }
+    .small {
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+  .info-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      label {
+        font-size: 14px;
+        color: var(--white-color);
+        font-weight: bold;
+      }
+      .title-input {
+        box-sizing: border-box;
+        position: relative;
+        width: 100%;
+        height: 50px;
+        padding: 14px 18px;
+        background: var(--white-color);
+        border: 2px solid var(--skyblue-color);
+        border-radius: 15px;
+        resize: none;
+        outline: none;
+        transition: border 1s ease;
+        font-size: 16px;
+        &::placeholder {
+          font-size: 14px;
+        }
+        &:focus {
+          border: 2px solid var(--blue-color);
+        }
+      }
+      .desciption-area {
+        box-sizing: border-box;
+        position: relative;
+        width: 100%;
+        height: 50vh;
+        padding: 14px 18px;
+        background: var(--white-color);
+        border: 2px solid var(--skyblue-color);
+        border-radius: 15px;
+        resize: none;
+        outline: none;
+        transition: border 1s ease;
+        font-size: 16px;
+        &::placeholder {
+          font-size: 14px;
+        }
+        &:focus {
+          border: 2px solid var(--blue-color);
+        }
+      }
+    }
+  }
+  .upload-btn {
+    margin-top: 20px;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
+    border-radius: 15px;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 1;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to top, var(--skyblue-color) 100%, var(--blue-color) 0%);
+      transition: transform 0.5s ease;
+      border-radius: 15px;
+      z-index: -1;
+      transform: scaleY(1);
+      transform-origin: bottom;
+    }
+
+    &:hover::before {
+      transform: scaleY(0);
     }
   }
 `;
