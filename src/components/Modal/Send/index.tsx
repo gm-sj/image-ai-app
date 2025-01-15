@@ -7,6 +7,7 @@ import useModal from '../../../hooks/useModal';
 
 interface ModalPageProps {
   fetchImage: (setImageUrl: (url: string) => void) => Promise<void>;
+  deviceType: string;
 }
 
 const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {

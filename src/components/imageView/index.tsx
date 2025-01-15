@@ -10,9 +10,10 @@ interface ImageData {
   id: string;
   url: string;
   description: string;
+  deviceType: string;
 }
 
-const ImageView: React.FC = () => {
+const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
   const [activeTab, setActiveTab] = useState('tab1');
   const [images, setImages] = useState<ImageData[]>([]); // ImageData 타입 배열로 수정
   const { openModal } = useModal();
@@ -75,7 +76,7 @@ const ImageView: React.FC = () => {
   }, []);
 
   return (
-    <ImageViewStyle>
+    <ImageViewStyle deviceType={deviceType}>
       <section className="contents grid-section">
         <div className="tab-menu">
           <div className="tabs">

@@ -9,7 +9,7 @@ const fadeIn = keyframes`
   }
 `;
 
-export const ImageViewStyle = styled.div`
+export const ImageViewStyle = styled.div<{ deviceType: string }>`
   width: 100%;
   .tab-menu {
     width: 100%;

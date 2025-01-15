@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PromptInputStyle } from './Styled';
 import SendImage from '../Modal/Send';
 import useModal from '../../hooks/useModal';
+import { useDeviceType } from '../../hooks/useDeviceType';
 
 interface PromptInputProps {
   generatedPrompt?: string;
@@ -9,6 +10,7 @@ interface PromptInputProps {
 
 const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
   const [prompt, setPrompt] = useState<string>(generatedPrompt);
+  const { deviceType } = useDeviceType();
   const { openModal } = useModal();
 
   useEffect(() => {
@@ -35,7 +37,8 @@ const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
   const handleSubmitButton = (): void => {
     openModal({
       id: 'SendImageModal',
-      component: <SendImage fetchImage={fetchImage} />,
+      // deviceType 전달
+      component: <SendImage fetchImage={fetchImage} deviceType={deviceType} />,
     });
   };
 
