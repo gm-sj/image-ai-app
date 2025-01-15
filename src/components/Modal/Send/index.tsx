@@ -89,24 +89,26 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
             ) : (
               <p>이미지를 불러오는 데 실패했습니다.</p>
             )}
-            <div className="contents-text">
-              <p>
-                이미지가 완성되었습니다.
-                <br />
-                버튼을 눌러 비율을 맞춰주세요
-              </p>
-              <AspectRatioSelector setAspectRatio={setAspectRatio} />
-            </div>
-            <div className="model-btn-wrapeer">
-              <button className="modal-btn-skyblue" onClick={handleImgUpload}>
-                메인에 업로드
-              </button>
-              <button className="modal-btn-blue" onClick={handleImgDownload}>
-                다운로드
-              </button>
-              <button className="modal-btn-white" onClick={() => closeModal('SendImageModal')}>
-                닫기
-              </button>
+            <div className="modal-footer">
+              <div className="contents-text">
+                <p>
+                  이미지가 완성되었습니다.
+                  <br />
+                  버튼을 눌러 비율을 맞춰주세요
+                </p>
+                <AspectRatioSelector setAspectRatio={setAspectRatio} />
+              </div>
+              <div className="model-btn-wrapeer">
+                <button className="modal-btn-skyblue" onClick={handleImgUpload}>
+                  메인에 업로드
+                </button>
+                <button className="modal-btn-blue" onClick={handleImgDownload}>
+                  다운로드
+                </button>
+                <button className="modal-btn-white" onClick={() => closeModal('SendImageModal')}>
+                  닫기
+                </button>
+              </div>
             </div>
           </div>
         )}
