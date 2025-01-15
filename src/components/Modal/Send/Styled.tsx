@@ -13,21 +13,25 @@ export const ModalWrapper = styled.div`
   z-index: 1000;
 `;
 
-export const ModalContent = styled.div<{ openSideModal: boolean }>`
+export const ModalContent = styled.div<{ openSideModal: boolean; deviceType: string }>`
   background-color: rgb(39, 39, 42);
   border-radius: 20px;
-  padding: 20px;
-  height: calc(100vh - 50px);
-  max-width: 640px;
-  width: 40vw;
+  padding: 40px 30px;
+  height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
+  max-width: ${(props) => (props.deviceType === 'mobile' ? 'initial' : '640px')};
+  width: ${(props) => (props.deviceType === 'mobile' ? '100%' : '40vw')};
   box-shadow: ${({ openSideModal }) => (openSideModal ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
   border-radius: ${({ openSideModal }) => (openSideModal ? '20px 0 0 20px' : '20px')};
   display: flex;
   justify-content: center;
   align-items: center;
   transition: 0.3s ease-in;
-  left: ${({ openSideModal }) => (openSideModal ? '0%' : '25%')};
-  position: relative;
+  ${({ deviceType, openSideModal }) =>
+    deviceType !== 'mobile' &&
+    `
+      left: ${openSideModal ? '0%' : '25%'};
+    `}
+  position: ${(props) => (props.deviceType === 'mobile' ? 'absolute' : 'relative')};
   .modal-contents {
     width: 100%;
     display: flex;
@@ -90,10 +94,11 @@ export const ModalContent = styled.div<{ openSideModal: boolean }>`
   }
 `;
 
-export const CommentModalStyle = styled.div<{ openSideModal: boolean }>`
-  width: 40vw;
+export const CommentModalStyle = styled.div<{ openSideModal: boolean; deviceType: string }>`
   flex-shrink: 0;
-  height: calc(100vh - 50px);
+  height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
+  max-width: ${(props) => (props.deviceType === 'mobile' ? 'initial' : '640px')};
+  width: ${(props) => (props.deviceType === 'mobile' ? 'initial' : '40vw')};
   background-color: rgb(39, 39, 42);
   border-radius: 20px;
   display: flex;
@@ -102,11 +107,15 @@ export const CommentModalStyle = styled.div<{ openSideModal: boolean }>`
   border-radius: ${({ openSideModal }) => (openSideModal ? '0 20px 20px 0' : '20px')};
   align-items: center;
   padding: 40px 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: ${({ openSideModal }) => (openSideModal ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
   transition: 0.3s ease-in;
   position: relative;
   z-index: -1;
-  right: ${({ openSideModal }) => (openSideModal ? '0%' : '15.5%')};
+  ${({ deviceType, openSideModal }) =>
+    deviceType !== 'mobile' &&
+    `
+      right: ${openSideModal ? '0%' : '15%'};
+    `}
   .introduce {
     width: 100%;
     display: flex;

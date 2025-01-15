@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { CloseButton, ImageWrapper, ModalStyle, CommentModalStyle } from './Styled';
 import useModal from '../../../hooks/useModal';
 import { Button } from '@mui/material';
+import { useDeviceType } from '../../../hooks/useDeviceType';
 
 interface DetailImageProps {
   id: string;
   imageUrl: string;
   description: string;
+  deviceType: string;
 }
 
 const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
@@ -18,6 +20,7 @@ const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
   const [openComment, setOpenComment] = useState<boolean>(false);
   // comment
   const [commentValue, setCommentValue] = useState<string | null>(null);
+  const { deviceType } = useDeviceType();
 
   const fetchData = async (): Promise<void> => {
     try {
@@ -51,8 +54,8 @@ const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
   if (!imageData) return <p>데이터를 불러오는 데 실패했습니다.</p>;
 
   return (
-    <div style={{ display: 'flex', width: '40vw' }}>
-      <ModalStyle openComment={openComment}>
+    <div style={{ display: 'flex', width: deviceType === 'mobile' ? '100%' : '40vw' }}>
+      <ModalStyle openComment={openComment} deviceType={deviceType}>
         <div className="modal-header">
           {/* 닫기 버튼 */}
           <CloseButton onClick={() => closeModal('detailModal')}>✖</CloseButton>
@@ -70,7 +73,7 @@ const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
           </div>
         </div>
       </ModalStyle>
-      <CommentModalStyle openComment={openComment}>
+      <CommentModalStyle openComment={openComment} deviceType={deviceType}>
         <div className="comment-add">
           <textarea
             onChange={(e) => {

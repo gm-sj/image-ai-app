@@ -4,6 +4,7 @@ import AspectRatioSelector from '../../AspectRatioSelector';
 import { ModalWrapper, ModalContent, CommentModalStyle } from './Styled';
 import { uploadImageFromUrl } from '../../../firebase/config';
 import useModal from '../../../hooks/useModal';
+import { useDeviceType } from '../../../hooks/useDeviceType';
 
 interface ModalPageProps {
   fetchImage: (setImageUrl: (url: string) => void) => Promise<void>;
@@ -16,6 +17,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [openSideModal, setOpenSideModal] = useState<boolean>(false);
   const { closeModal } = useModal();
+  const { deviceType } = useDeviceType();
 
   // 이미지 로드
   useEffect(() => {
@@ -82,7 +84,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
 
   return (
     <ModalWrapper>
-      <ModalContent openSideModal={openSideModal}>
+      <ModalContent openSideModal={openSideModal} deviceType={deviceType}>
         {isLoading ? (
           <CircularProgress sx={{ color: '#005bea' }} />
         ) : (
@@ -118,7 +120,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
           </div>
         )}
       </ModalContent>
-      <CommentModalStyle openSideModal={openSideModal}>
+      <CommentModalStyle openSideModal={openSideModal} deviceType={deviceType}>
         <div className="info-area">
           <div className="introduce">
             <p>제목과 정보를 입력해주세요</p>

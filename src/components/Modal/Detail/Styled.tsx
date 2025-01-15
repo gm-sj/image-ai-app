@@ -10,7 +10,7 @@ const FadeIn = keyframes`
   }
 `;
 
-export const ModalStyle = styled.div<{ openComment: boolean }>`
+export const ModalStyle = styled.div<{ openComment: boolean; deviceType: string }>`
   /* width: 45vw;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
@@ -21,18 +21,22 @@ export const ModalStyle = styled.div<{ openComment: boolean }>`
 
   width: 100%;
   flex-shrink: 0;
-  height: calc(100vh - 50px);
+  height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
   background-color: rgb(39, 39, 42);
-  border-radius: ${({ openComment }) => (openComment ? '20px 0 0 20px' : '20px')};
+  border-radius: ${({ openComment, deviceType }) =>
+    deviceType === 'mobile' ? '0' : openComment ? '20px 0 0 20px' : '20px'};
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: ${(props) => (props.deviceType === 'mobile' ? 'absolute' : 'relative')};
   padding: 40px 30px;
-  box-shadow: ${({ openComment }) => (openComment ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
+  box-shadow: ${({ openComment, deviceType }) =>
+    deviceType === 'mobile' ? 'none' : openComment ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)'};
   transition: 0.3s ease-in;
-  right: ${({ openComment }) => (openComment ? '50%' : '0')};
+  right: ${({ openComment, deviceType }) =>
+    deviceType === 'mobile' ? '0' : openComment ? '50%' : '0'};
   z-index: 2;
+  opacity: 0;
 
   .button-box {
     display: flex;
@@ -81,22 +85,25 @@ export const ImageWrapper = styled.div`
   }
 `;
 
-export const CommentModalStyle = styled.div<{ openComment: boolean }>`
-  width: 100%;
+export const CommentModalStyle = styled.div<{ openComment: boolean; deviceType: string }>`
+  width: ${(props) => (props.deviceType === 'mobile' ? '100vw' : '100%')};
   flex-shrink: 0;
-  height: calc(100vh - 50px);
+  height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
   background-color: rgb(39, 39, 42);
-  border-radius: ${({ openComment }) => (openComment ? '0 20px 20px 0' : '20px')};
+  border-radius: ${({ openComment, deviceType }) =>
+    deviceType === 'mobile' ? '0' : openComment ? '0 20px 20px 0' : '20px'};
   display: flex;
   flex-direction: column;
   //justify-content: center;
   align-items: center;
   position: relative;
   padding: 40px 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: ${({ deviceType }) =>
+    deviceType === 'mobile' ? 'none' : '0 4px 10px rgba(0, 0, 0, 0.3)'};
   transition: 0.3s ease-in;
   animation: ${FadeIn} 0.3s;
-  right: ${({ openComment }) => (openComment ? '50%' : '100%')};
+  right: ${({ openComment, deviceType }) =>
+    deviceType === 'mobile' ? '0' : openComment ? '50%' : '100%'};
 
   .comment-add {
     width: 100%;
