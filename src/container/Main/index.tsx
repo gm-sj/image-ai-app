@@ -7,7 +7,6 @@ import ImageView from '../../components/imageView';
 import Footer from '../../components/Footer';
 
 const Main: React.FC = () => {
-  const [aspectRatio, setAspectRatio] = useState<string>('1/1');
   const [prompt, setPrompt] = useState<string>(''); // 프롬프트 상태 추가
 
   const handlePromptGenerated = (generatedPrompt: string) => {
@@ -26,11 +25,7 @@ const Main: React.FC = () => {
           <Option
             onPromptGenerated={handlePromptGenerated} // 추가된 prop
           />
-          <PromptInput
-            aspectRatio={aspectRatio}
-            setAspectRatio={setAspectRatio}
-            generatedPrompt={prompt}
-          />
+          <PromptInput generatedPrompt={prompt} />
           <ImageView />
         </section>
       </main>

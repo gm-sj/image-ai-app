@@ -4,16 +4,10 @@ import SendImage from '../Modal/Send';
 import useModal from '../../hooks/useModal';
 
 interface PromptInputProps {
-  aspectRatio: string;
-  setAspectRatio: (newAspectRatio: string) => void; // 수정된 타입
   generatedPrompt?: string;
 }
 
-const PromptInput: React.FC<PromptInputProps> = ({
-  aspectRatio,
-  setAspectRatio,
-  generatedPrompt = '',
-}) => {
+const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
   const [prompt, setPrompt] = useState<string>(generatedPrompt);
   const { openModal } = useModal();
 
@@ -41,13 +35,7 @@ const PromptInput: React.FC<PromptInputProps> = ({
   const handleSubmitButton = (): void => {
     openModal({
       id: 'SendImageModal',
-      component: (
-        <SendImage
-          fetchImage={fetchImage}
-          aspectRatio={aspectRatio}
-          setAspectRatio={setAspectRatio} // 부모에서 전달받은 함수 전달
-        />
-      ),
+      component: <SendImage fetchImage={fetchImage} />,
     });
   };
 

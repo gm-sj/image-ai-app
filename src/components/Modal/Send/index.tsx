@@ -7,15 +7,15 @@ import useModal from '../../../hooks/useModal';
 
 interface ModalPageProps {
   fetchImage: (setImageUrl: (url: string) => void) => Promise<void>;
-  aspectRatio: string;
-  setAspectRatio: (newAspectRatio: string) => void;
 }
 
-const SendImage: React.FC<ModalPageProps> = ({ fetchImage, aspectRatio, setAspectRatio }) => {
+const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
+  const [aspectRatio, setAspectRatio] = useState<string>('1/1');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { closeModal } = useModal();
 
+  // 이미지 로드
   useEffect(() => {
     setIsLoading(true);
     fetchImage(setImageUrl)
@@ -25,6 +25,11 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage, aspectRatio, setAspec
         setIsLoading(false);
       });
   }, [fetchImage]);
+
+  // 비율 변경 로그 확인 (디버깅용)
+  useEffect(() => {
+    console.log('Updated aspectRatio:', aspectRatio);
+  }, [aspectRatio]);
 
   const handleImgUpload = async () => {
     if (!imageUrl) return;
@@ -71,7 +76,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage, aspectRatio, setAspec
 
   return (
     <ModalWrapper>
-      <ModalContent>
+      <ModalContent key={aspectRatio}>
         {isLoading ? (
           <CircularProgress sx={{ color: '#005bea' }} />
         ) : (
@@ -79,6 +84,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage, aspectRatio, setAspec
             {imageUrl ? (
               <div className="modal-img-contents">
                 <img src={imageUrl} alt="Generated" style={{ aspectRatio }} />
+                <p>{aspectRatio}</p>
               </div>
             ) : (
               <p>이미지를 불러오는 데 실패했습니다.</p>

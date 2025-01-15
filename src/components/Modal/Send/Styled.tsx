@@ -14,23 +14,28 @@ export const ModalWrapper = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background-color: #ffffff;
+  background-color: rgb(39, 39, 42);
   border-radius: 10px;
   padding: 20px;
-  max-width: 50vw;
-  width: 800px;
+  height: calc(100vh - 50px);
+  max-width: 640px;
+  width: 100%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .modal-img-contents {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
     height: 100%;
+
     img {
       max-width: 100%;
-      height: 50vh;
+      max-height: 70vh;
+      height: 100%;
     }
   }
   .contents-text {
@@ -39,6 +44,8 @@ export const ModalContent = styled.div`
     align-items: center;
     padding: 0 20px;
     margin-top: 40px;
+    color: var(--white-color);
+    line-height: 1.3;
     p {
       font-size: 16px;
       font-weight: 700;
