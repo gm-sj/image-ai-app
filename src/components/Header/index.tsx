@@ -6,15 +6,10 @@ import { HeaderStyle } from './Styled';
 import Logo from '../../common/images/logo.png';
 
 const Headers: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = () => {
     setIsScrolled(window.scrollY > 0);
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
   };
 
   useEffect(() => {
@@ -33,18 +28,7 @@ const Headers: React.FC = () => {
           </div>
 
           <nav className="web-nav-list-wrapper" />
-          <nav className="mobile-nav-list-wrapper">
-            <div className={`mobile-menu-btn ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-              <span />
-              <span />
-              <span />
-            </div>
-            <ul className={`menu-area ${isMenuOpen ? 'open' : ''}`}>
-              <li>best</li>
-              <li>worst</li>
-              <li>top5</li>
-            </ul>
-          </nav>
+          <nav className="mobile-nav-list-wrapper" />
         </div>
       </div>
     </HeaderStyle>

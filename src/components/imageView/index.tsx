@@ -10,9 +10,10 @@ interface ImageData {
   id: string;
   url: string;
   description: string;
+  deviceType: string;
 }
 
-const ImageView: React.FC = () => {
+const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
   const [activeTab, setActiveTab] = useState('tab1');
   const [images, setImages] = useState<ImageData[]>([]); // ImageData 타입 배열로 수정
   const { openModal } = useModal();
@@ -26,7 +27,14 @@ const ImageView: React.FC = () => {
   const openDetailModal = (id: string, url: string, description: string) => {
     openModal({
       id: 'detailModal',
-      component: <DetailImageModal id={id} imageUrl={url} description={description} />,
+      component: (
+        <DetailImageModal
+          id={id}
+          imageUrl={url}
+          description={description}
+          deviceType={deviceType}
+        />
+      ),
     });
   };
 
@@ -75,7 +83,7 @@ const ImageView: React.FC = () => {
   }, []);
 
   return (
-    <ImageViewStyle>
+    <ImageViewStyle deviceType={deviceType}>
       <section className="contents grid-section">
         <div className="tab-menu">
           <div className="tabs">
@@ -98,26 +106,32 @@ const ImageView: React.FC = () => {
               Tab 3
             </button>
           </div>
-
           <div className="tab-content">
             {activeTab === 'tab1' && (
               <div className="tab-pane">
                 <div className="grid-container">
                   {images.length > 0
-                    ? images.map((image, index) => (
-                        <div
-                          className={`grid-item item${index + 1}`}
-                          onClick={() => openDetailModal(image.id, image.url, image.description)}
-                          key={image.id}
-                        >
-                          <img
-                            src={image.url}
-                            alt={image.description}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                        </div>
-                      ))
-                    : Array.from({ length: 10 }).map((_, index) => (
+                    ? images
+                        .slice(
+                          0,
+                          deviceType === 'mobile' ? 3 : deviceType === 'tablet' ? 6 : images.length,
+                        )
+                        .map((image, index) => (
+                          <div
+                            className={`grid-item item${index + 1}`}
+                            onClick={() => openDetailModal(image.id, image.url, image.description)}
+                            key={image.id}
+                          >
+                            <img
+                              src={image.url}
+                              alt={image.description}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          </div>
+                        ))
+                    : Array.from({
+                        length: deviceType === 'mobile' ? 3 : deviceType === 'tablet' ? 6 : 10,
+                      }).map((_, index) => (
                         <div
                           className={`grid-item item${index + 1}`}
                           style={{
