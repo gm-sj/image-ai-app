@@ -3,16 +3,13 @@ import styled from 'styled-components';
 export const OptionStyld = styled.div`
   width: 100%;
   .option-wrapper {
-    margin-top: 35px;
     display: flex;
     flex-direction: row;
     padding: 0 20px;
-    gap: 10px;
     width: 100%;
     justify-content: flex-start;
     align-items: center;
     font-size: 12px;
-    gap: 20px;
     .select-item {
       display: flex;
       flex-direction: row;
@@ -21,50 +18,34 @@ export const OptionStyld = styled.div`
       position: relative;
       padding: 5px 20px;
       gap: 5px;
+      font-weight: 700;
       cursor: pointer;
 
       &.img-upload {
-        border: 1px solid var(--gray-color);
+        border: none;
+        background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
+        transition: transform 0.5s ease;
         border-radius: 15px;
-      }
-      .item-select {
-        width: 15px;
-        height: 15px;
-        background-color: var(--blue-color);
-      }
-      .upload-btn {
-        position: absolute;
-        label {
-          position: absolute;
-          inset: 0px 44px 0px 0px;
-          overflow: hidden;
-          opacity: 0;
-          cursor: pointer;
-        }
-        input {
-          display: none;
-        }
-      }
-      .ratio-item {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-        padding: 5px 20px;
-        gap: 5px;
-        outline: 1px solid var(--skyblue-color);
-        border-radius: 15px;
+        color: var(--white-color);
         cursor: pointer;
-        &.active {
-          background-color: var(--gray-color);
-          outline: 2px solid var(--blue-color);
+        z-index: 1;
+        overflow: hidden;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to top, var(--skyblue-color) 100%, var(--blue-color) 0%);
+          transition: transform 0.5s ease;
+          border-radius: 15px;
+          z-index: -1;
+          transform: scaleY(1);
+          transform-origin: top;
         }
-        span {
-          width: 15px;
-          height: 15px;
-          background-color: var(--blue-color);
-          cursor: pointer;
+        &:hover::before {
+          transform: scaleY(0);
         }
       }
     }

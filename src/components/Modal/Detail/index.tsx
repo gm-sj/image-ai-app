@@ -3,13 +3,13 @@ import { CloseButton, ImageWrapper, ModalStyle, CommentModalStyle } from './Styl
 import useModal from '../../../hooks/useModal';
 import { Button } from '@mui/material';
 
-interface ImageData {
+interface DetailImageProps {
   id: string;
   imageUrl: string;
   description: string;
 }
 
-const DetailImage = () => {
+const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
   // img
   const { closeModal } = useModal();
   const [imageData, setImageData] = useState<ImageData | null>(null);
@@ -60,8 +60,8 @@ const DetailImage = () => {
         <div className="modal-body">
           {/* 이미지와 설명 */}
           <ImageWrapper>
-            <img src={imageData.imageUrl} alt={imageData.description} />
-            <p className="description">{imageData.description}</p>
+            <img src={imageUrl} alt={description} />
+            <p className="description">{description}</p>
           </ImageWrapper>
           <div className="button-box">
             <Button variant="contained" onClick={openDescription}>

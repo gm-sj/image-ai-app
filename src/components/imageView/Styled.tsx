@@ -1,4 +1,13 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 export const ImageViewStyle = styled.div`
   width: 100%;
@@ -53,6 +62,7 @@ export const ImageViewStyle = styled.div`
         transition: transform 0.3s;
         cursor: pointer;
         position: relative;
+        animation: ${fadeIn} 2s ease-in-out;
 
         &:hover {
           transform: scale(1.05);
@@ -67,7 +77,7 @@ export const ImageViewStyle = styled.div`
           background: rgba(0, 0, 0, 0.4);
           transition: transform 0.5s ease;
           border-radius: 14px;
-          z-index: -1;
+          z-index: 0;
           transform: translateY(200%);
           transform-origin: bottom;
         }
@@ -82,6 +92,7 @@ export const ImageViewStyle = styled.div`
 
       .item2 {
         grid-area: item2;
+        height: 270px;
       }
 
       .item3 {
@@ -91,6 +102,7 @@ export const ImageViewStyle = styled.div`
 
       .item4 {
         grid-area: item4;
+        height: 270px;
       }
 
       .item5 {
