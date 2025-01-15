@@ -20,7 +20,7 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
       justify-content: center;
       border-bottom: 2px solid var(--gray-color);
       margin-bottom: 20px;
-      gap: 100px;
+      gap: ${(props) => (props.deviceType === 'mobile' ? '40px' : '100px')};
 
       .tab-link {
         padding: 10px 20px;
@@ -44,10 +44,24 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
 
       .grid-container {
         display: grid;
-        grid-template-areas:
+        grid-template-areas: ${(props) =>
+          props.deviceType === 'mobile'
+            ? `
+          'item1'
+          'item2'
+          'item3'
+        `
+            : props.deviceType === 'tablet'
+              ? `
+          'item1 item2'
+          'item3 item4'
+          'item5 item6'
+        `
+              : `
           'item1 item2 item3 item4'
           'item1 item5 item6 item7'
-          'item8 item9 item6 item10';
+          'item8 item9 item6 item10'
+        `};
         gap: 16px;
         max-width: 100%;
       }
@@ -56,7 +70,7 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
       .grid-item {
         background-color: var(--gray-color);
         border-radius: 12px;
-        height: 200px;
+        height: ${(props) => (props.deviceType === 'tablet' || 'mobile' ? '100%' : '200px')};
         overflow: hidden;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s;
@@ -92,7 +106,7 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
 
       .item2 {
         grid-area: item2;
-        height: 270px;
+        height: ${(props) => (props.deviceType === 'tablet' || 'mobile' ? '100%' : '200px')};
       }
 
       .item3 {
@@ -102,11 +116,12 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
 
       .item4 {
         grid-area: item4;
-        height: 270px;
+        height: ${(props) => (props.deviceType === 'tablet' || 'mobile' ? '100%' : '200px')};
       }
 
       .item5 {
         grid-area: item5;
+        height: ${(props) => (props.deviceType === 'tablet' || 'mobile' ? '100%' : '200px')};
       }
 
       .item6 {
