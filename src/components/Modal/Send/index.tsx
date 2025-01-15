@@ -16,6 +16,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [openSideModal, setOpenSideModal] = useState<boolean>(false);
+  const [backModal, setBackModal] = useState<boolean>(false);
   const { closeModal } = useModal();
   const { deviceType } = useDeviceType();
 
@@ -120,7 +121,11 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
           </div>
         )}
       </ModalContent>
-      <CommentModalStyle openSideModal={openSideModal} deviceType={deviceType}>
+      <CommentModalStyle
+        openSideModal={openSideModal}
+        deviceType={deviceType}
+        backModal={backModal}
+      >
         <div className="info-area">
           <div className="introduce">
             <p>제목과 정보를 입력해주세요</p>
@@ -137,9 +142,21 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
             <textarea className="desciption-area" placeholder="내용을 입력해주세요" />
           </div>
         </div>
-        <button className="upload-btn" onClick={handleImgUpload}>
-          메인에 업로드
-        </button>
+        <div className="btn-area">
+          {deviceType === 'mobile' ? (
+            <button
+              className="back-btn"
+              onClick={() => setBackModal((prev) => !prev)} // 상태를 토글로 변경
+            >
+              뒤로가기
+            </button>
+          ) : (
+            ''
+          )}
+          <button className="upload-btn" onClick={handleImgUpload}>
+            메인에 업로드
+          </button>
+        </div>
       </CommentModalStyle>
     </ModalWrapper>
   );

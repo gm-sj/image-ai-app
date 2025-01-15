@@ -94,11 +94,15 @@ export const ModalContent = styled.div<{ openSideModal: boolean; deviceType: str
   }
 `;
 
-export const CommentModalStyle = styled.div<{ openSideModal: boolean; deviceType: string }>`
+export const CommentModalStyle = styled.div<{
+  openSideModal: boolean;
+  deviceType: string;
+  backModal: boolean;
+}>`
   flex-shrink: 0;
   height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
   max-width: ${(props) => (props.deviceType === 'mobile' ? 'initial' : '640px')};
-  width: ${(props) => (props.deviceType === 'mobile' ? 'initial' : '40vw')};
+  width: ${(props) => (props.deviceType === 'mobile' ? '100vw' : '40vw')};
   background-color: rgb(39, 39, 42);
   border-radius: 20px;
   display: flex;
@@ -110,12 +114,18 @@ export const CommentModalStyle = styled.div<{ openSideModal: boolean; deviceType
   box-shadow: ${({ openSideModal }) => (openSideModal ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
   transition: 0.3s ease-in;
   position: relative;
-  z-index: -1;
+  z-index: ${({ deviceType, openSideModal, backModal }) => {
+    if (deviceType !== 'mobile') return '-1';
+    if (backModal) return '-1';
+    if (openSideModal) return '2';
+    return '-1'; // 기본값
+  }};
   ${({ deviceType, openSideModal }) =>
     deviceType !== 'mobile' &&
     `
       right: ${openSideModal ? '0%' : '15%'};
     `}
+
   .introduce {
     width: 100%;
     display: flex;
@@ -191,37 +201,74 @@ export const CommentModalStyle = styled.div<{ openSideModal: boolean; deviceType
       }
     }
   }
-  .upload-btn {
-    margin-top: 20px;
-    position: relative;
-    overflow: hidden;
-    border: none;
+  .btn-area {
     width: 100%;
-    height: 60px;
-    background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
-    border-radius: 15px;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-    z-index: 1;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    .back-btn {
+      position: relative;
+      overflow: hidden;
+      border: none;
       width: 100%;
-      height: 100%;
-      background: linear-gradient(to top, var(--skyblue-color) 100%, var(--blue-color) 0%);
-      transition: transform 0.5s ease;
+      height: 60px;
+      background: linear-gradient(to top, var(--white-color) 0%, var(--gray-color) 100%);
       border-radius: 15px;
-      z-index: -1;
-      transform: scaleY(1);
-      transform-origin: bottom;
-    }
+      color: var(--black-color);
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 1;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, var(--white-color) 100%, var(--gray-color) 0%);
+        transition: transform 0.5s ease;
+        border-radius: 15px;
+        z-index: -1;
+        transform: scaleY(1);
+        transform-origin: bottom;
+      }
 
-    &:hover::before {
-      transform: scaleY(0);
+      &:hover::before {
+        transform: scaleY(0);
+      }
+    }
+    .upload-btn {
+      position: relative;
+      overflow: hidden;
+      border: none;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
+      border-radius: 15px;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 1;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, var(--skyblue-color) 100%, var(--blue-color) 0%);
+        transition: transform 0.5s ease;
+        border-radius: 15px;
+        z-index: -1;
+        transform: scaleY(1);
+        transform-origin: bottom;
+      }
+
+      &:hover::before {
+        transform: scaleY(0);
+      }
     }
   }
 `;
