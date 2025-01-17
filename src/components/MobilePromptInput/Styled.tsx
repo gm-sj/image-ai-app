@@ -1,20 +1,31 @@
 import styled from 'styled-components';
 
-export const PromptInputStyle = styled.div<{ deviceType: string }>`
+export const PromptInputStyle = styled.div<{ deviceType: string; isVisible: boolean }>`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 640px;
   width: 100%;
+  background-color: rgba(182, 182, 182, 0.6);
+  border-radius: 15px;
+  transition: 0.8s;
+  opacity: ${(props) => (props.isVisible ? '1' : '0')};
+  visibility: ${(props) => (props.isVisible ? 'visible' : 'hidden')};
+
   .input-contents-wrapper {
     display: flex;
-    flex-direction: ${(props) => (props.deviceType === 'mobile' ? 'column' : 'row')};
-    gap: 20px;
+    flex-direction: row;
+    gap: 10px;
     width: 100%;
-    padding: 20px;
+    padding: 10px;
     justify-content: center;
     align-items: center;
     textarea {
       box-sizing: border-box;
       position: relative;
       width: 100%;
-      height: 100px;
+      height: 50px;
       padding: 14px 18px;
       background: var(--white-color);
       border: 2px solid var(--skyblue-color);
@@ -23,7 +34,7 @@ export const PromptInputStyle = styled.div<{ deviceType: string }>`
       outline: none;
       transition: border 1s ease;
       &::placeholder {
-        font-size: 14px;
+        font-size: ${(props) => (props.deviceType === 'mobile' ? '12px' : '14px')};
       }
       &:focus {
         border: 2px solid var(--blue-color);
@@ -36,13 +47,13 @@ export const PromptInputStyle = styled.div<{ deviceType: string }>`
       display: flex;
       justify-content: center;
       align-items: center;
-      width: ${(props) => (props.deviceType === 'mobile' ? '100%' : '182px')};
-      height: ${(props) => (props.deviceType === 'mobile' ? '50px' : '100px')};
+      width: 80px;
+      height: 50px;
       margin: 0 auto;
       background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
       border-radius: 15px;
       color: #fff;
-      font-size: 20px;
+      font-size: 14px;
       cursor: pointer;
       z-index: 1;
 

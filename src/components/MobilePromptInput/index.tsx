@@ -12,6 +12,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
   const [prompt, setPrompt] = useState<string>(generatedPrompt);
   const { deviceType } = useDeviceType();
   const { openModal } = useModal();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     if (generatedPrompt && generatedPrompt !== prompt) {
@@ -19,6 +20,19 @@ const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
       console.log('Generated Prompt:', generatedPrompt);
     }
   }, [generatedPrompt]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setIsVisible(currentScrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const fetchImage = async (setImageUrl: (url: string) => void): Promise<void> => {
     try {
@@ -43,7 +57,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
   };
 
   return (
-    <PromptInputStyle deviceType={deviceType}>
+    <PromptInputStyle deviceType={deviceType} isVisible={isVisible}>
       <div className="input-contents-wrapper">
         <textarea
           value={prompt}

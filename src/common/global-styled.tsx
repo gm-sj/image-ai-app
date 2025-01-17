@@ -59,7 +59,7 @@ const GlobalStyle = createGlobalStyle`
 
     /* Color */
      --skyblue-color: #00c6fb;
-     --blue-color: #005bea;
+     --blue-color: #1976d2;
      --white-color: #ffffff;
      --black-color: #000000;
      --gray-color: #cdcdcd;

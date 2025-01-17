@@ -24,7 +24,7 @@ const Headers: React.FC = () => {
       <div className={`header-wrapper ${isScrolled ? 'scrolled' : ''}`}>
         <div className="menu-item-wrapper">
           <div className="title-wrapper">
-            <img src={Logo} width={130} height={50} />
+            <img src={Logo} />
           </div>
 
           <nav className="web-nav-list-wrapper" />

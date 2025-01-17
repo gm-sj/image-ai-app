@@ -5,6 +5,7 @@ import PromptInput from '../../components/PromptInput';
 import Option from '../../components/Option';
 import ImageView from '../../components/imageView';
 import Footer from '../../components/Footer';
+import MobilePromptInput from '../../components/MobilePromptInput';
 
 import { useDeviceType } from '../../hooks/useDeviceType';
 
@@ -30,6 +31,7 @@ const Main: React.FC = () => {
           <ImageView deviceType={deviceType} />
         </section>
       </main>
+      <MobilePromptInput />
       <Footer />
     </MainStyle>
   );

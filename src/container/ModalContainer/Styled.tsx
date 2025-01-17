@@ -28,4 +28,9 @@ export const ModalContainerStyle = styled.div`
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
   }
+  > div {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
 `;
