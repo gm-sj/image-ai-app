@@ -1,19 +1,18 @@
 import styled from 'styled-components';
 
 export const ModalWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  position: relative;
 `;
 
-export const ModalContent = styled.div<{ openSideModal: boolean; deviceType: string }>`
+export const ModalContent = styled.div<{
+  openSideModal: boolean;
+  deviceType: string;
+}>`
   background-color: rgb(39, 39, 42);
   border-radius: 20px;
   padding: 40px 30px;
@@ -26,12 +25,16 @@ export const ModalContent = styled.div<{ openSideModal: boolean; deviceType: str
   justify-content: center;
   align-items: center;
   transition: 0.3s ease-in;
-  ${({ deviceType, openSideModal }) =>
-    deviceType !== 'mobile' &&
-    `
-      left: ${openSideModal ? '0%' : '25%'};
-    `}
-  position: ${(props) => (props.deviceType === 'mobile' ? 'absolute' : 'relative')};
+  z-index: 2;
+  transform: ${({ openSideModal }) =>
+    openSideModal ? 'translate(-50%, 0%);' : 'translate(0%, 0%);'};
+
+  &.mobile-modal {
+    border-radius: initial;
+    transform: translate(0%, 0%);
+  }
+
+  position: absolute;
   .modal-contents {
     width: 100%;
     display: flex;
@@ -47,47 +50,40 @@ export const ModalContent = styled.div<{ openSideModal: boolean; deviceType: str
 
       img {
         max-width: 100%;
-        max-height: 70vh;
+        max-height: 60vh;
         height: auto;
       }
     }
-    .contents-text {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-      margin-top: 40px;
-      color: var(--white-color);
-      line-height: 1.3;
-      p {
-        font-size: 16px;
-        font-weight: 700;
+    .modal-footer {
+      margin-top: 20px;
+      .contents-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        color: var(--white-color);
+        line-height: 1.3;
+        p {
+          font-size: 16px;
+          font-weight: 700;
+        }
       }
-    }
-    .model-btn-wrapeer {
-      display: flex;
-      justify-content: space-between;
-      padding: 20px;
-      button {
-        min-width: 10vw;
-        max-width: 15vw;
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-weight: 700;
-        cursor: pointer;
-        border: none;
-        &.modal-btn-skyblue {
-          background-color: var(--skyblue-color);
-          color: var(--white-color);
+      .model-btn-wrapeer {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+
+        & > button {
+          width: 140px;
+          height: 36px;
+          font-size: ${(props) => (props.deviceType === 'mobile' ? '12px' : '14px')};
         }
-        &.modal-btn-blue {
-          background-color: var(--blue-color);
-          color: var(--white-color);
-        }
-        &.modal-btn-white {
+
+        .close-btn {
           background-color: var(--white-color);
           color: var(--black-color);
-          border: 1px solid var(--gray-color);
         }
       }
     }
@@ -97,10 +93,9 @@ export const ModalContent = styled.div<{ openSideModal: boolean; deviceType: str
 export const CommentModalStyle = styled.div<{
   openSideModal: boolean;
   deviceType: string;
-  backModal: boolean;
 }>`
   flex-shrink: 0;
-  height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
+  height: ${(props) => (props.deviceType === 'mobile' ? '70vh' : 'calc(100vh - 50px)')};
   max-width: ${(props) => (props.deviceType === 'mobile' ? 'initial' : '640px')};
   width: ${(props) => (props.deviceType === 'mobile' ? '100vw' : '40vw')};
   background-color: rgb(39, 39, 42);
@@ -113,18 +108,16 @@ export const CommentModalStyle = styled.div<{
   padding: 40px 30px;
   box-shadow: ${({ openSideModal }) => (openSideModal ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)')};
   transition: 0.3s ease-in;
-  position: relative;
-  z-index: ${({ deviceType, openSideModal, backModal }) => {
-    if (deviceType !== 'mobile') return '-1';
-    if (backModal) return '-1';
-    if (openSideModal) return '2';
-    return '-1'; // 기본값
-  }};
-  ${({ deviceType, openSideModal }) =>
-    deviceType !== 'mobile' &&
-    `
-      right: ${openSideModal ? '0%' : '15%'};
-    `}
+  position: absolute;
+  transform: ${({ openSideModal }) =>
+    openSideModal ? 'translate(50%, 0%);' : 'translate(0%, 0%);'};
+  &.mobile-modal {
+    border-radius: 15px 15px 0 0;
+    transform: ${({ openSideModal }) =>
+      openSideModal ? 'translate(0%, 0%);' : 'translate(0%, 100%);'} !important;
+    bottom: 0;
+    z-index: 3;
+  }
 
   .introduce {
     width: 100%;
@@ -183,7 +176,7 @@ export const CommentModalStyle = styled.div<{
         box-sizing: border-box;
         position: relative;
         width: 100%;
-        height: 50vh;
+        height: ${(props) => (props.deviceType === 'mobile' ? '15vh' : '50vh')};
         padding: 14px 18px;
         background: var(--white-color);
         border: 2px solid var(--skyblue-color);
@@ -205,7 +198,7 @@ export const CommentModalStyle = styled.div<{
     width: 100%;
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-direction: ${(props) => (props.deviceType === 'mobile' ? 'row' : 'column')};
     gap: 20px;
     .back-btn {
       position: relative;

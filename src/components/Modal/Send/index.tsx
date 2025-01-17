@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import AspectRatioSelector from '../../AspectRatioSelector';
 import { ModalWrapper, ModalContent, CommentModalStyle } from './Styled';
+import { Button } from '@mui/material';
 import { uploadImageFromUrl } from '../../../firebase/config';
 import useModal from '../../../hooks/useModal';
 import { useDeviceType } from '../../../hooks/useDeviceType';
@@ -16,7 +17,6 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [openSideModal, setOpenSideModal] = useState<boolean>(false);
-  const [backModal, setBackModal] = useState<boolean>(false);
   const { closeModal } = useModal();
   const { deviceType } = useDeviceType();
 
@@ -85,7 +85,11 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
 
   return (
     <ModalWrapper>
-      <ModalContent openSideModal={openSideModal} deviceType={deviceType}>
+      <ModalContent
+        className={`${deviceType === 'mobile' ? 'mobile-modal' : ''}`}
+        openSideModal={openSideModal}
+        deviceType={deviceType}
+      >
         {isLoading ? (
           <CircularProgress sx={{ color: '#005bea' }} />
         ) : (
@@ -97,34 +101,34 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
             ) : (
               <p>이미지를 불러오는 데 실패했습니다.</p>
             )}
+            <AspectRatioSelector setAspectRatio={setAspectRatio} aspectRatio={aspectRatio} />
             <div className="modal-footer">
               <div className="contents-text">
-                <p>
-                  이미지가 완성되었습니다.
-                  <br />
-                  버튼을 눌러 비율을 맞춰주세요
-                </p>
-                <AspectRatioSelector setAspectRatio={setAspectRatio} aspectRatio={aspectRatio} />
+                <p>이미지가 완성되었습니다. 버튼을 눌러 비율을 맞춰주세요</p>
               </div>
               <div className="model-btn-wrapeer">
-                <button className="modal-btn-skyblue" onClick={toggleModalSide}>
-                  타이틀지정하기
-                </button>
-                <button className="modal-btn-blue" onClick={handleImgDownload}>
-                  다운로드
-                </button>
-                <button className="modal-btn-white" onClick={() => closeModal('SendImageModal')}>
+                <Button
+                  className="close-btn"
+                  variant="outlined"
+                  onClick={() => closeModal('SendImageModal')}
+                >
                   닫기
-                </button>
+                </Button>
+                <Button variant="contained" onClick={handleImgDownload}>
+                  다운로드
+                </Button>
+                <Button variant="contained" onClick={toggleModalSide}>
+                  저장하기
+                </Button>
               </div>
             </div>
           </div>
         )}
       </ModalContent>
       <CommentModalStyle
+        className={`${deviceType === 'mobile' ? 'mobile-modal' : ''}`}
         openSideModal={openSideModal}
         deviceType={deviceType}
-        backModal={backModal}
       >
         <div className="info-area">
           <div className="introduce">
@@ -146,7 +150,7 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
           {deviceType === 'mobile' ? (
             <button
               className="back-btn"
-              onClick={() => setBackModal((prev) => !prev)} // 상태를 토글로 변경
+              onClick={() => setOpenSideModal(false)} // 상태를 토글로 변경
             >
               뒤로가기
             </button>
