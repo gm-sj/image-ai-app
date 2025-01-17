@@ -29,8 +29,9 @@ export const HeaderStyle = styled.header`
       .title-wrapper {
         color: rgba(0, 0, 0, 0.8);
 
-        h1 {
-          font-size: 22px;
+        img {
+          width: 138px;
+          height: 26px;
         }
       }
 
