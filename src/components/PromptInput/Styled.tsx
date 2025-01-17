@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const PromptInputStyle = styled.div`
+export const PromptInputStyle = styled.div<{ deviceType: string }>`
   width: 100%;
   .input-contents-wrapper {
     display: flex;
-    flex-direction: row;
-    gap: 10px;
+    flex-direction: ${(props) => (props.deviceType === 'mobile' ? 'column' : 'row')};
+    gap: 20px;
     width: 100%;
     padding: 20px;
     justify-content: center;
@@ -36,8 +36,8 @@ export const PromptInputStyle = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 182px;
-      height: 100px;
+      width: ${(props) => (props.deviceType === 'mobile' ? '100%' : '182px')};
+      height: ${(props) => (props.deviceType === 'mobile' ? '50px' : '100px')};
       margin: 0 auto;
       background: linear-gradient(to top, var(--skyblue-color) 0%, var(--blue-color) 100%);
       border-radius: 15px;

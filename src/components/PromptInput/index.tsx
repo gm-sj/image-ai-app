@@ -43,7 +43,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
   };
 
   return (
-    <PromptInputStyle>
+    <PromptInputStyle deviceType={deviceType}>
       <div className="input-contents-wrapper">
         <textarea
           value={prompt}
