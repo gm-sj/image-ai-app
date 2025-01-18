@@ -96,7 +96,7 @@ export const ImageWrapper = styled.div`
 
   img {
     max-width: 100%;
-    height: 65vh;
+    height: auto;
     border-radius: 10px;
     margin-bottom: 10px;
   }
