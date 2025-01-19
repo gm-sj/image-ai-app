@@ -9,6 +9,9 @@ const ModalContainer = () => {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   const closeModalList = (e: React.MouseEvent<HTMLDivElement>) => {
+    console.log('target', e.target);
+    console.log('currentTarget', e.currentTarget);
+
     if (e.target === e.currentTarget && modalRef.current) {
       modalRef.current.classList.remove('open');
       modalRef.current.classList.add('close'); // 애니메이션 클래스 추가
@@ -20,6 +23,7 @@ const ModalContainer = () => {
 
   useEffect(() => {
     if (modalRef.current && modalList.length > 0 && !modalRef.current.classList.contains('open')) {
+      modalRef.current.classList.add('close');
       setTimeout(() => {
         modalRef.current?.classList.add('open');
       }, 10);
@@ -34,9 +38,13 @@ const ModalContainer = () => {
   // 모달 컴포넌트를 포탈로 렌더링
   /* 모달 배경을 여기서 설정. */
   return createPortal(
-    <ModalContainerStyle ref={modalRef} onClick={closeModalList}>
+    <ModalContainerStyle ref={modalRef}>
       {modalList.map((modal) => (
-        <div className={modal?.isClosing ? 'closeIndividualModal' : ''} key={modal.id}>
+        <div
+          className={modal?.isClosing ? 'closeIndividualModal' : ''}
+          key={modal.id}
+          onClick={closeModalList}
+        >
           {modal.component}
         </div>
       ))}

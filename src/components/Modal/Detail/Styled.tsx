@@ -10,15 +10,15 @@ const FadeIn = keyframes`
   }
 `;
 export const ModalContainerStyle = styled.div`
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
-export const ModalStyle = styled.div<{ openComment: boolean; deviceType: string }>`
+export const ModalStyle = styled.div<{ $openComment: boolean; deviceType: string }>`
   /* width: 45vw;
   height: calc(100vh - 50px);
   background-color: rgb(39, 39, 42);
@@ -31,17 +31,18 @@ export const ModalStyle = styled.div<{ openComment: boolean; deviceType: string 
   flex-shrink: 0;
   height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
   background-color: rgb(39, 39, 42);
-  border-radius: ${({ openComment, deviceType }) =>
-    deviceType === 'mobile' ? '0' : openComment ? '20px 0 0 20px' : '20px'};
+  border-radius: ${({ $openComment, deviceType }) =>
+    deviceType === 'mobile' ? '0' : $openComment ? '20px 0 0 20px' : '20px'};
   display: flex;
   flex-direction: column;
   align-items: center;
   position: absolute;
   padding: 40px 30px;
-  box-shadow: ${({ openComment, deviceType }) =>
-    deviceType === 'mobile' ? 'none' : openComment ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)'};
+  box-shadow: ${({ $openComment, deviceType }) =>
+    deviceType === 'mobile' ? 'none' : $openComment ? '0' : '0 4px 10px rgba(0, 0, 0, 0.3)'};
   transition: 0.3s ease-in;
-  transform: ${({ openComment }) => (openComment ? 'translate(-50%, 0%);' : 'translate(0%, 0%);')};
+  transform: ${({ $openComment }) =>
+    $openComment ? 'translate(-50%, 0%);' : 'translate(0%, 0%);'};
   z-index: 2;
   &.mobile-modal {
     border-radius: initial;

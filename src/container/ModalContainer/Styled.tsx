@@ -6,12 +6,9 @@ export const ModalContainerStyle = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.851);
   z-index: 9999;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -32,5 +29,8 @@ export const ModalContainerStyle = styled.div`
     width: 100%;
     height: 100%;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
