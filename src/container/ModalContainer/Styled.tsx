@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ModalContainerStyle = styled.div`
+export const ModalContainerStyle = styled.div<{ deviceType: string }>`
   position: fixed; /* 뷰포트를 기준으로 고정 */
   top: 0;
   left: 0;
@@ -29,8 +29,8 @@ export const ModalContainerStyle = styled.div`
     transition: opacity 0.3s ease-in-out;
   }
   > div {
-    width: 100%;
-    height: 100%;
     position: relative;
+    width: ${(props) => (props.deviceType === 'mobile' ? '100%' : '')};
+    height: ${(props) => (props.deviceType === 'mobile' ? '100%' : '')};
   }
 `;

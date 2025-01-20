@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { ModalSetterContext, ModalStateContext } from '../../context/ModalProvider';
 import { createPortal } from 'react-dom';
 import { ModalContainerStyle } from './Styled';
+import { useDeviceType } from '../../hooks/useDeviceType';
 
 const ModalContainer = () => {
   const modalList = useContext(ModalStateContext);
   const setModalList = useContext(ModalSetterContext);
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const { deviceType } = useDeviceType();
 
   const closeModalList = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget && modalRef.current) {
@@ -34,7 +36,7 @@ const ModalContainer = () => {
   // 모달 컴포넌트를 포탈로 렌더링
   /* 모달 배경을 여기서 설정. */
   return createPortal(
-    <ModalContainerStyle ref={modalRef} onClick={closeModalList}>
+    <ModalContainerStyle ref={modalRef} onClick={closeModalList} deviceType={deviceType}>
       {modalList.map((modal) => (
         <div className={modal?.isClosing ? 'closeIndividualModal' : ''} key={modal.id}>
           {modal.component}
