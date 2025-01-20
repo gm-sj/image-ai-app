@@ -9,24 +9,46 @@ import {
 import useModal from '../../../hooks/useModal';
 import { Button } from '@mui/material';
 import { useDeviceType } from '../../../hooks/useDeviceType';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../../firebase/config';
 
 interface DetailImageProps {
   id: string;
   imageUrl: string;
   description: string;
-  deviceType: string;
 }
 
-const DetailImage = ({ imageUrl, description }: DetailImageProps) => {
+const DetailImage = ({ id, imageUrl, description }: DetailImageProps) => {
   // img
   const { closeModal } = useModal();
   const [openComment, setOpenComment] = useState<boolean>(false);
   // comment
-  const [commentValue, setCommentValue] = useState<string | null>(null);
+  const [commentValue, setCommentValue] = useState('');
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
   const { deviceType } = useDeviceType();
 
   const openDescription = () => {
     setOpenComment(!openComment);
+  };
+
+  const saveComment = async () => {
+    if (!userId || !password || !commentValue) {
+      alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    const commentData = {
+      userId,
+      password,
+      commentValue,
+    };
+
+    await addDoc(collection(db, `images/${id}/comments`), commentData);
+
+    setUserId('');
+    setPassword('');
+    setCommentValue('');
   };
 
   return (
@@ -69,27 +91,28 @@ const DetailImage = ({ imageUrl, description }: DetailImageProps) => {
           <button className="modal-close" onClick={() => setOpenComment(false)}>
             x
           </button>
-        ) : (
-          ''
-        )}
+        ) : null}
         <div className="comment-add">
           <div className="user-info-add">
             <div className="form">
               <label htmlFor="">닉네임</label>
-              <input type="text" />
+              <input value={userId} type="text" onChange={(e) => setUserId(e.target.value)} />
             </div>
             <div className="form">
               <label htmlFor="">패스워드</label>
-              <input type="text" />
+              <input value={password} type="text" onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
           <div className="textarea-add">
             <textarea
+              value={commentValue}
               onChange={(e) => {
                 setCommentValue(e.target.value);
               }}
             />
-            <Button variant="contained">등록하기</Button>
+            <Button variant="contained" onClick={saveComment}>
+              등록하기
+            </Button>
           </div>
         </div>
         <ul className="comment-list-wrapper">

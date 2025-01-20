@@ -27,14 +27,7 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
   const openDetailModal = (id: string, url: string, description: string) => {
     openModal({
       id: 'detailModal',
-      component: (
-        <DetailImageModal
-          id={id}
-          imageUrl={url}
-          description={description}
-          deviceType={deviceType}
-        />
-      ),
+      component: <DetailImageModal id={id} imageUrl={url} description={description} />,
     });
   };
 
