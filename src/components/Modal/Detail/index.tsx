@@ -20,44 +20,14 @@ interface DetailImageProps {
 const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
   // img
   const { closeModal } = useModal();
-  const [imageData, setImageData] = useState<ImageData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [openComment, setOpenComment] = useState<boolean>(false);
   // comment
   const [commentValue, setCommentValue] = useState<string | null>(null);
   const { deviceType } = useDeviceType();
 
-  const fetchData = async (): Promise<void> => {
-    try {
-      const response = await fetch('/dummy'); // MSW 핸들러로 GET 요청
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      const data: ImageData = await response.json();
-      setImageData(data);
-    } catch (err: unknown) {
-      // `unknown` 타입으로 처리 후 명시적으로 검사
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      console.error('Failed to fetch data:', errorMessage);
-      setError('데이터를 불러오는 데 실패했습니다.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const openDescription = () => {
     setOpenComment(!openComment);
   };
-
-  // 데이터 가져오기
-  useEffect(() => {
-    fetchData().catch((err) => console.error(err));
-  }, []);
-
-  if (loading) return <p>로딩 중...</p>;
-  if (error) return <p>{error}</p>;
-  if (!imageData) return <p>데이터를 불러오는 데 실패했습니다.</p>;
 
   return (
     <ModalContainerStyle>
