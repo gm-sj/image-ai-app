@@ -3,27 +3,39 @@ import { ImageViewStyle } from './Styled';
 import useModal from '../../hooks/useModal';
 import { DetailImageModal } from '../Modal';
 import CircularProgress from '@mui/material/CircularProgress';
-import { onSnapshot, collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { onSnapshot, collection, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../../firebase/config';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface ImageData {
   id: string;
   url: string;
   description: string;
-  deviceType: string;
 }
 
 const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
   const [activeTab, setActiveTab] = useState('tab1');
-  const [images, setImages] = useState<ImageData[]>([]); // ImageData 타입 배열로 수정
+  const [images, setImages] = useState<ImageData[]>([]);
   const { openModal } = useModal();
 
-  // Tab 클릭 핸들러
+  // 리액트슬릭 세팅값
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true,
+  };
+
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
   };
 
-  // Detail Modal 열기
   const openDetailModal = (id: string, url: string, description: string) => {
     openModal({
       id: 'detailModal',
@@ -43,40 +55,24 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
       const imageCollection = collection(db, 'images');
       const q = query(imageCollection, orderBy('createdAt', 'desc'), limit(10));
 
-      // Firestore 실시간 업데이트 구독
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const imageData = snapshot.docs.map((doc) => {
-          const data = doc.data();
-          console.log('Realtime Fetched Data:', data); // 실시간 데이터 로그
-          if (data && data.url) {
-            return {
-              id: doc.id,
-              url: data.url,
-              description: data.description || 'No description',
-            };
-          } else {
-            console.warn('Missing "url" field:', doc.id, data);
-            return null;
-          }
-        });
-
-        const validImages = imageData.filter((image): image is ImageData => image !== null);
-        setImages(validImages);
+        const imageData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          url: doc.data().url || '',
+          description: doc.data().description || 'No description',
+        }));
+        setImages(imageData);
       });
 
-      // 반환된 unsubscribe 함수를 통해 구독 해제 가능
       return unsubscribe;
     } catch (error) {
-      console.error('Error fetching images in real-time:', error);
-      return () => {}; // 오류 발생 시 빈 함수 반환
+      console.error('Error fetching images:', error);
+      return () => {};
     }
   };
 
   useEffect(() => {
-    // fetchImages 함수 호출하여 실시간 구독 시작
     const unsubscribe = fetchImages();
-
-    // 컴포넌트 언마운트 시 구독 해제
     return () => {
       unsubscribe();
     };
@@ -109,14 +105,10 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
           <div className="tab-content">
             {activeTab === 'tab1' && (
               <div className="tab-pane">
-                <div className="grid-container">
-                  {images.length > 0
-                    ? images
-                        .slice(
-                          0,
-                          deviceType === 'mobile' ? 3 : deviceType === 'tablet' ? 6 : images.length,
-                        )
-                        .map((image, index) => (
+                {(deviceType === 'desktop' || deviceType === 'tablet') && (
+                  <div className="grid-container">
+                    {images.length > 0
+                      ? images.map((image, index) => (
                           <div
                             className={`grid-item item${index + 1}`}
                             onClick={() => openDetailModal(image.id, image.url, image.description)}
@@ -129,53 +121,50 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
                             />
                           </div>
                         ))
-                    : Array.from({
-                        length: deviceType === 'mobile' ? 3 : deviceType === 'tablet' ? 6 : 10,
-                      }).map((_, index) => (
-                        <div
-                          className={`grid-item item${index + 1}`}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                          key={index}
-                        >
-                          <CircularProgress />
-                        </div>
-                      ))}
-                </div>
+                      : Array.from({ length: 10 }).map((_, index) => (
+                          <div
+                            className={`grid-item item${index + 1}`}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                            key={index}
+                          >
+                            <CircularProgress />
+                          </div>
+                        ))}
+                  </div>
+                )}
+                {deviceType === 'mobile' && (
+                  <Slider {...settings}>
+                    {images.map((image, index) => (
+                      <div
+                        key={index}
+                        onClick={() => openDetailModal(image.id, image.url, image.description)}
+                      >
+                        <img
+                          src={image.url}
+                          alt={image.description}
+                          style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                )}
               </div>
             )}
             {activeTab === 'tab2' && (
               <div className="tab-pane">
                 <div className="grid-container">
-                  <div className="grid-item item1">탭2입니다</div>
-                  <div className="grid-item item2" />
-                  <div className="grid-item item3" />
-                  <div className="grid-item item4" />
-                  <div className="grid-item item5" />
-                  <div className="grid-item item6" />
-                  <div className="grid-item item7" />
-                  <div className="grid-item item8" />
-                  <div className="grid-item item9" />
-                  <div className="grid-item item10" />
+                  <div className="grid-item item1">Tab 2 Content</div>
                 </div>
               </div>
             )}
             {activeTab === 'tab3' && (
               <div className="tab-pane">
                 <div className="grid-container">
-                  <div className="grid-item item1">탭3입니다</div>
-                  <div className="grid-item item2" />
-                  <div className="grid-item item3" />
-                  <div className="grid-item item4" />
-                  <div className="grid-item item5" />
-                  <div className="grid-item item6" />
-                  <div className="grid-item item7" />
-                  <div className="grid-item item8" />
-                  <div className="grid-item item9" />
-                  <div className="grid-item item10" />
+                  <div className="grid-item item1">Tab 3 Content</div>
                 </div>
               </div>
             )}

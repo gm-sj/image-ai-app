@@ -45,7 +45,7 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
         padding: 20px;
 
         .grid-container {
-          display: grid;
+          display: ${(props) => (props.deviceType === 'mobile' ? '' : 'grid')};
           grid-template-areas: ${(props) =>
             props.deviceType === 'mobile'
               ? `
@@ -145,6 +145,45 @@ export const ImageViewStyle = styled.div<{ deviceType: string }>`
 
         .item9 {
           grid-area: item10;
+        }
+      }
+    }
+  }
+  /* 슬라이드 코드 */
+  .slick-prev {
+    z-index: 1;
+    left: -10px;
+    width: 28px;
+    height: 28px;
+    background-color: var(--white-color);
+    border-radius: 50%;
+    &::before {
+      color: var(--skyblue-color);
+      font-size: 28px;
+    }
+  }
+  .slick-next {
+    z-index: 1;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    background-color: var(--white-color);
+    border-radius: 50%;
+    &::before {
+      color: var(--skyblue-color);
+      font-size: 28px;
+    }
+  }
+  .slick-list {
+    border-radius: 20px;
+    .slick-track {
+      .slick-slide {
+        border-radius: 20px;
+        &:first-child {
+          margin-left: 0px;
+        }
+        &:last-child {
+          margin-right: 0px;
         }
       }
     }
