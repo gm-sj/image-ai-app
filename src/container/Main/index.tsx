@@ -17,6 +17,26 @@ const Main: React.FC = () => {
     setPrompt(generatedPrompt);
   };
 
+  // 모바일 일시 body쪽 스크롤 차단
+
+  useEffect(() => {
+    const body = document.querySelector('body') as HTMLElement;
+    const app = document.querySelector('#root') as HTMLElement;
+
+    if (deviceType === 'mobile') {
+      body.style.overflowX = 'hidden';
+      app.style.overflowX = 'hidden';
+    } else {
+      body.style.overflowX = '';
+      app.style.overflowX = '';
+    }
+
+    return () => {
+      body.style.overflowX = '';
+      app.style.overflowX = '';
+    };
+  }, [deviceType]);
+
   return (
     <MainStyle deviceType={deviceType}>
       <Headers />
