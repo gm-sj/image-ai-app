@@ -13,9 +13,16 @@ interface ImageData {
   id: string;
   url: string;
   description: string;
+  title: string;
+  prompt: string;
+  generatedPrompt?: string;
 }
 
-const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
+const ImageView: React.FC<{
+  deviceType: string;
+  prompt: string;
+  generatedPrompt?: string | undefined;
+}> = ({ deviceType, prompt, generatedPrompt }) => {
   const [activeTab, setActiveTab] = useState('tab1');
   const [images, setImages] = useState<ImageData[]>([]);
   const { openModal } = useModal();
@@ -36,15 +43,17 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
     setActiveTab(tabId);
   };
 
-  const openDetailModal = (id: string, url: string, description: string) => {
+  const openDetailModal = (id: string, url: string, description: string, title: string) => {
     openModal({
       id: 'detailModal',
       component: (
         <DetailImageModal
           id={id}
           imageUrl={url}
+          title={title}
           description={description}
           deviceType={deviceType}
+          prompt={prompt}
         />
       ),
     });
@@ -59,6 +68,8 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
         const imageData = snapshot.docs.map((doc) => ({
           id: doc.id,
           url: doc.data().url || '',
+          title: doc.data().title,
+          prompt: doc.data().prompt,
           description: doc.data().description || 'No description',
         }));
         setImages(imageData);
@@ -111,7 +122,9 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
                       ? images.map((image, index) => (
                           <div
                             className={`grid-item item${index + 1}`}
-                            onClick={() => openDetailModal(image.id, image.url, image.description)}
+                            onClick={() =>
+                              openDetailModal(image.id, image.url, image.description, image.title)
+                            }
                             key={image.id}
                           >
                             <img
@@ -141,7 +154,9 @@ const ImageView: React.FC<{ deviceType: string }> = ({ deviceType }) => {
                     {images.map((image, index) => (
                       <div
                         key={index}
-                        onClick={() => openDetailModal(image.id, image.url, image.description)}
+                        onClick={() =>
+                          openDetailModal(image.id, image.url, image.description, image.title)
+                        }
                       >
                         <img
                           src={image.url}

@@ -10,15 +10,16 @@ import { useDeviceType } from '../../../hooks/useDeviceType';
 interface ModalPageProps {
   fetchImage: (setImageUrl: (url: string) => void) => Promise<void>;
   deviceType: string;
+  prompt: string;
 }
 
-const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
+const SendImage: React.FC<ModalPageProps> = ({ fetchImage, prompt }) => {
   const [aspectRatio, setAspectRatio] = useState<string>('1/1');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [openSideModal, setOpenSideModal] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>(''); // 제목 상태 추가
-  const [description, setDescription] = useState<string>(''); // 내용 상태 추가
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const { closeModal } = useModal();
   const { deviceType } = useDeviceType();
 
@@ -34,13 +35,13 @@ const SendImage: React.FC<ModalPageProps> = ({ fetchImage }) => {
   }, [fetchImage]);
 
   const handleImgUpload = async () => {
-    if (!imageUrl || !title || !description) {
+    if (!imageUrl || !title || !description || !prompt) {
       alert('이미지, 제목, 내용을 모두 입력해주세요.');
       return;
     }
 
     try {
-      await uploadImageFromUrl(imageUrl, title, description); // description에 내용 전달
+      await uploadImageFromUrl(imageUrl, description, title, prompt);
       console.log('Send 컴포넌트 데이터 업로드 성공:', { title, description });
       closeModal('SendImageModal');
     } catch (error) {

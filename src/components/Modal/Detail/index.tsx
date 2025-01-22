@@ -14,10 +14,12 @@ interface DetailImageProps {
   id: string;
   imageUrl: string;
   description: string;
+  title: string;
   deviceType: string;
+  prompt: string;
 }
 
-const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
+const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description, title, prompt }) => {
   // img
   const { closeModal } = useModal();
   const [openComment, setOpenComment] = useState<boolean>(false);
@@ -40,7 +42,20 @@ const DetailImage: React.FC<DetailImageProps> = ({ imageUrl, description }) => {
           {/* 이미지와 설명 */}
           <ImageWrapper>
             <img src={imageUrl} alt={description} />
-            <p className="description">{description}</p>
+            <div className="info-wrpper">
+              <div className="title-area">
+                <p className="area-title">타이틀</p>
+                <p className="title">{title}</p>
+              </div>
+              <div className="prompt-area">
+                <p className="area-title">프롬프트 내용 </p>
+                <p className="prompt">{prompt}</p>
+              </div>
+              <div className="description-area">
+                <p className="area-title">내용</p>
+                <p className="description">{description}</p>
+              </div>
+            </div>
           </ImageWrapper>
           <div className="button-box">
             {deviceType === 'mobile' ? (

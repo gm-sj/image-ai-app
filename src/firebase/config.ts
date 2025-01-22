@@ -31,9 +31,14 @@ export const db = initializeFirestore(
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
 
-async function uploadImageFromUrl(imageUrl: string, description: string, title: string) {
+async function uploadImageFromUrl(
+  imageUrl: string,
+  description: string,
+  title: string,
+  prompt: string,
+) {
   try {
-    if (!imageUrl || !description || !title) {
+    if (!imageUrl || !description || !title || !prompt) {
       throw new Error('이미지 URL, 제목, 설명을 모두 입력해주세요.');
     }
 
@@ -79,8 +84,9 @@ async function uploadImageFromUrl(imageUrl: string, description: string, title: 
     // 4. Firestore에 데이터 저장
     const imageDoc = {
       id: newId, // 순번 ID
-      title,
       description,
+      title,
+      prompt,
       url: downloadUrl,
       createdAt: serverTimestamp(),
     };
