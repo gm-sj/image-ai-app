@@ -52,7 +52,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ generatedPrompt = '' }) => {
     openModal({
       id: 'SendImageModal',
       // deviceType 전달
-      component: <SendImage fetchImage={fetchImage} deviceType={deviceType} />,
+      component: <SendImage fetchImage={fetchImage} deviceType={deviceType} prompt={prompt} />,
     });
   };
 

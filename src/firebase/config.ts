@@ -2,9 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import {
   initializeFirestore,
-  getFirestore,
   collection,
-  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+  doc,
+  setDoc,
   serverTimestamp,
 } from 'firebase/firestore';
 
@@ -14,41 +18,41 @@ const firebaseConfig = {};
 const app = initializeApp(firebaseConfig);
 
 const storage = getStorage(app);
-// Firestore 초기화 시 옵션 설정
+// Firestore 초기화
 export const db = initializeFirestore(
   app,
   {
-    host: 'asia-northeast3-firestore.googleapis.com', // 리전에 맞는 호스트 설정
-    ssl: true, // HTTPS 연결 활성화
+    host: 'asia-northeast3-firestore.googleapis.com',
+    ssl: true,
   },
-  'img-db-test',
+  'img-data',
 );
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png'];
 
-async function uploadImageFromUrl(imageUrl: string, description: string) {
-  /// https://image.pollinations.ai/prompt/cute%20cat
-
+async function uploadImageFromUrl(
+  imageUrl: string,
+  description: string,
+  title: string,
+  prompt: string,
+) {
   try {
-    if (!imageUrl || !description) {
-      throw new Error('이미지 URL과 설명을 입력해주세요.');
+    if (!imageUrl || !description || !title || !prompt) {
+      throw new Error('이미지 URL, 제목, 설명을 모두 입력해주세요.');
     }
 
     // 1. 이미지 URL의 데이터를 가져오기
     const response = await fetch(imageUrl);
-    console.log('response', response);
 
     if (!response.ok) {
       throw new Error('이미지를 가져올 수 없습니다.');
     }
 
-    // 2. Blob 데이터 가져오기
     const imageBlob = await response.blob();
 
-    // 3. 파일 크기와 MIME 타입 검증
-    const fileSize = imageBlob.size; // Blob의 크기 (바이트 단위)
-    const fileType = imageBlob.type; // Blob의 MIME 타입
+    const fileSize = imageBlob.size;
+    const fileType = imageBlob.type;
 
     if (fileSize > MAX_FILE_SIZE) {
       throw new Error('파일 크기가 너무 큽니다.');
@@ -58,26 +62,38 @@ async function uploadImageFromUrl(imageUrl: string, description: string) {
       throw new Error('허용되지 않은 파일 형식입니다.');
     }
 
-    // 4. Firebase Storage에 업로드
+    // 2. Firebase Storage에 업로드
     const fileName = `images/${Date.now()}-${Math.random().toString(36).substring(2)}`;
     const storageRef = ref(storage, fileName);
     await uploadBytes(storageRef, imageBlob, { contentType: fileType });
 
-    // 업로드된 파일 URL 가져오기
     const downloadUrl = await getDownloadURL(storageRef);
-    //console.log();
 
-    // 파이어베이스에서 저장된 우리만의 url
+    // 3. Firestore에서 마지막 순번 가져오기
+    const imagesRef = collection(db, 'images');
+    const lastImageQuery = query(imagesRef, orderBy('id', 'desc'), limit(1));
+    const lastImageSnapshot = await getDocs(lastImageQuery);
 
-    // 5. Firestore에 데이터 저장
+    let newId = 1; // 기본 순번
+    if (!lastImageSnapshot.empty) {
+      const lastDoc = lastImageSnapshot.docs[0];
+      const lastId = lastDoc.data().id;
+      newId = lastId + 1; // 마지막 순번에 +1
+    }
+
+    // 4. Firestore에 데이터 저장
     const imageDoc = {
+      id: newId, // 순번 ID
       description,
+      title,
+      prompt,
       url: downloadUrl,
       createdAt: serverTimestamp(),
     };
-    await addDoc(collection(db, 'images'), imageDoc);
 
-    console.log('이미지가 성공적으로 저장되었습니다.');
+    await setDoc(doc(imagesRef, String(newId)), imageDoc);
+
+    console.log('이미지가 성공적으로 저장되었습니다.', imageDoc);
   } catch (error) {
     console.error('이미지 업로드 실패:', (error as Error).message);
   }

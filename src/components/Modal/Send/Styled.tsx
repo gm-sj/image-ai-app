@@ -172,7 +172,7 @@ export const CommentModalStyle = styled.div<{
           border: 2px solid var(--blue-color);
         }
       }
-      .desciption-area {
+      .description-area {
         box-sizing: border-box;
         position: relative;
         width: 100%;

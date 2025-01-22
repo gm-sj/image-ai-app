@@ -10,7 +10,7 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
   const [activeImageCount, setActiveImageCount] = useState<number | null>(null);
 
   const fetchPromptFromGoogleAI = async () => {
-    const API_KEY = 'AIzaSyDQBp8yEmeT9f-eu4NpU3qWNVQxTYvsy9g';
+    const API_KEY = '';
 
     if (!API_KEY) {
       console.error('API 키가 설정되지 않았습니다.');
@@ -25,7 +25,7 @@ const Option: React.FC<OptionProps> = ({ onPromptGenerated }) => {
       });
 
       const prompt =
-        'Make a short and creative prompt for AI image generation. Just give me the result value instead';
+        'Make a short and creative prompt for AI image generation. Just give me the result value instead ,all korean only text';
       const result = await model.generateContent(prompt);
 
       const generatedPrompt = result.response.text();
