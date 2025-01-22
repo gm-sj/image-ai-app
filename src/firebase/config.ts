@@ -25,7 +25,7 @@ export const db = initializeFirestore(
     host: 'asia-northeast3-firestore.googleapis.com',
     ssl: true,
   },
-  'img-data',
+  'img-db-test',
 );
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
