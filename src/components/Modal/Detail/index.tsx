@@ -9,7 +9,15 @@ import {
 import useModal from '../../../hooks/useModal';
 import { Button } from '@mui/material';
 import { useDeviceType } from '../../../hooks/useDeviceType';
-import { addDoc, collection } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from 'firebase/firestore';
 import { db } from '../../../firebase/config';
 
 interface DetailImageProps {
@@ -31,6 +39,9 @@ const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, ti
   const [password, setPassword] = useState('');
   const { deviceType } = useDeviceType();
 
+  const [commentList, setCommentList] = useState<any[]>([]);
+  console.log('commentList!', commentList);
+
   const openDescription = () => {
     setOpenComment(!openComment);
   };
@@ -45,6 +56,7 @@ const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, ti
       userId,
       password,
       commentValue,
+      createdAt: serverTimestamp(),
     };
 
     await addDoc(collection(db, `images/${id}/comments`), commentData);
@@ -53,6 +65,18 @@ const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, ti
     setPassword('');
     setCommentValue('');
   };
+
+  useEffect(() => {
+    const commentsRef = collection(db, `images/${id}/comments`);
+    const initialQuery = query(commentsRef, orderBy('createdAt', 'desc'), limit(10));
+
+    const unsubscribe = onSnapshot(initialQuery, (snapshot) => {
+      const newComments = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setCommentList(newComments);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <ModalContainerStyle>
@@ -132,17 +156,13 @@ const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, ti
           </div>
         </div>
         <ul className="comment-list-wrapper">
-          {Array.from({ length: 7 }).map((_, index) => (
-            <li className="comment-list" key={index}>
+          {commentList.map((data) => (
+            <li className="comment-list" key={data.id}>
               <div className="comment-user-info">
-                <span className="nickname">닉네임 {index + 1}</span>
+                <span className="nickname">닉네임 {data.userId}</span>
               </div>
               <div className="comment-wrapper">
-                <p className="comment">
-                  댓글내용입니다.....댓글내용입니다.....댓글내용입니다.....댓글내용입니다.....
-                  댓글내용입니다.....댓글내용입니다.....댓글내용입니다.....댓글내용입니다.....
-                  댓글내용입니다.....댓글내용입니다.....댓글내용입니다.....댓글내용입니다.....
-                </p>
+                <p className="comment">{data.commentValue}</p>
                 {/* <span className="">더보기</span> */}
               </div>
               <div className="button-box">

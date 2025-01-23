@@ -11,9 +11,6 @@ const ModalContainer = () => {
   const { deviceType } = useDeviceType();
 
   const closeModalList = (e: React.MouseEvent<HTMLDivElement>) => {
-    console.log('target', e.target);
-    console.log('currentTarget', e.currentTarget);
-
     if (e.target === e.currentTarget && modalRef.current) {
       modalRef.current.classList.remove('open');
       modalRef.current.classList.add('close'); // 애니메이션 클래스 추가

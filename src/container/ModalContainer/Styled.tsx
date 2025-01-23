@@ -9,6 +9,9 @@ export const ModalContainerStyle = styled.div<{ deviceType: string }>`
   background-color: rgba(0, 0, 0, 0.851);
   z-index: 9999;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
