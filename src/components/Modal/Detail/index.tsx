@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ModalContainerStyle,
-  CloseButton,
-  ImageWrapper,
-  ModalStyle,
-  CommentModalStyle,
-} from './Styled';
+import { ModalContainerStyle, ImageWrapper, ModalStyle, CommentModalStyle } from './Styled';
 import useModal from '../../../hooks/useModal';
 import { Button } from '@mui/material';
 import { useDeviceType } from '../../../hooks/useDeviceType';
@@ -17,6 +11,8 @@ import {
   orderBy,
   query,
   serverTimestamp,
+  doc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../../firebase/config';
 
@@ -29,23 +25,26 @@ interface DetailImageProps {
   prompt: string;
 }
 
-const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, title, prompt }) => {
-  // img
-  const { closeModal } = useModal();
-  const [openComment, setOpenComment] = useState<boolean>(false);
-  // comment
-  const [commentValue, setCommentValue] = useState('');
-  const [userId, setUserId] = useState('');
-  const [password, setPassword] = useState('');
-  const { deviceType } = useDeviceType();
+interface AddCommentProps {
+  id: string;
+  userId: string;
+  setUserId: (value: string) => void;
+  password: string;
+  setPassword: (value: string) => void;
+  commentValue: string;
+  setCommentValue: (value: string) => void;
+}
 
-  const [commentList, setCommentList] = useState<any[]>([]);
-  console.log('commentList!', commentList);
-
-  const openDescription = () => {
-    setOpenComment(!openComment);
-  };
-
+/* 댓글 추가 */
+const AddComment = ({
+  id,
+  userId,
+  setUserId,
+  password,
+  setPassword,
+  commentValue,
+  setCommentValue,
+}: AddCommentProps) => {
   const saveComment = async () => {
     if (!userId || !password || !commentValue) {
       alert('모든 필드를 입력해주세요.');
@@ -64,6 +63,124 @@ const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, ti
     setUserId('');
     setPassword('');
     setCommentValue('');
+  };
+
+  return (
+    <div className="comment-add">
+      <div className="user-info-add">
+        <div className="form">
+          <label htmlFor="">닉네임</label>
+          <input value={userId} type="text" onChange={(e) => setUserId(e.target.value)} />
+        </div>
+        <div className="form">
+          <label htmlFor="">패스워드</label>
+          <input value={password} type="text" onChange={(e) => setPassword(e.target.value)} />
+        </div>
+      </div>
+      <div className="textarea-add">
+        <textarea
+          value={commentValue}
+          onChange={(e) => {
+            setCommentValue(e.target.value);
+          }}
+        />
+        <Button variant="contained" onClick={saveComment}>
+          등록하기
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+/* 댓글 리스트 */
+const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) => {
+  const [editMode, setEditMode] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState<string>('');
+
+  const handleEditClick = (id: string, currentValue: string) => {
+    setEditMode(id);
+    setEditValue(currentValue);
+  };
+
+  const handleCancelEdit = () => {
+    setEditMode(null);
+  };
+
+  /* 수정 */
+  const handleSaveEdit = async (commentUserId: string) => {
+    try {
+      // 특정 id를 가진 서브컬렉션의 문서 참조
+      const commentRef = doc(db, `images/${id}/comments`, commentUserId);
+
+      // 문서 업데이트
+      await updateDoc(commentRef, { commentValue: editValue });
+
+      setEditMode(null);
+      setEditValue('');
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    }
+  };
+
+  return (
+    <ul className="comment-list-wrapper">
+      {commentList.map((data) => (
+        <li className="comment-list" key={data.id}>
+          <div className="comment-user-info">
+            <span className="nickname">닉네임 {data.userId}</span>
+          </div>
+          <div className="comment-wrapper">
+            {editMode === data.id ? (
+              <textarea value={editValue} onChange={(e) => setEditValue(e.target.value)} />
+            ) : (
+              <p className="comment">{data.commentValue}</p>
+            )}
+            {/* <span className="">더보기</span> */}
+          </div>
+          <div className="button-box">
+            {editMode === data.id ? (
+              <>
+                <Button variant="contained" onClick={() => handleSaveEdit(data.id)}>
+                  저장하기
+                </Button>
+                <Button color="error" variant="outlined" onClick={handleCancelEdit}>
+                  취소하기
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  onClick={() => handleEditClick(data.id, data.commentValue)}
+                >
+                  수정하기
+                </Button>
+                <Button color="error" variant="outlined">
+                  삭제하기
+                </Button>
+              </>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const DetailImage = ({ id, imageUrl, description, title, prompt }: DetailImageProps) => {
+  // img
+  const { closeModal } = useModal();
+  const [openComment, setOpenComment] = useState<boolean>(false);
+  // comment
+  const [commentValue, setCommentValue] = useState('');
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
+  const { deviceType } = useDeviceType();
+
+  const [commentList, setCommentList] = useState<any[]>([]);
+
+  const openDescription = () => {
+    setOpenComment(!openComment);
   };
 
   useEffect(() => {
@@ -132,48 +249,16 @@ const DetailImage: React.FC<DetailImageProps> = ({ id, imageUrl, description, ti
             x
           </button>
         ) : null}
-        <div className="comment-add">
-          <div className="user-info-add">
-            <div className="form">
-              <label htmlFor="">닉네임</label>
-              <input value={userId} type="text" onChange={(e) => setUserId(e.target.value)} />
-            </div>
-            <div className="form">
-              <label htmlFor="">패스워드</label>
-              <input value={password} type="text" onChange={(e) => setPassword(e.target.value)} />
-            </div>
-          </div>
-          <div className="textarea-add">
-            <textarea
-              value={commentValue}
-              onChange={(e) => {
-                setCommentValue(e.target.value);
-              }}
-            />
-            <Button variant="contained" onClick={saveComment}>
-              등록하기
-            </Button>
-          </div>
-        </div>
-        <ul className="comment-list-wrapper">
-          {commentList.map((data) => (
-            <li className="comment-list" key={data.id}>
-              <div className="comment-user-info">
-                <span className="nickname">닉네임 {data.userId}</span>
-              </div>
-              <div className="comment-wrapper">
-                <p className="comment">{data.commentValue}</p>
-                {/* <span className="">더보기</span> */}
-              </div>
-              <div className="button-box">
-                <Button variant="contained">수정하기</Button>
-                <Button color="error" variant="outlined">
-                  삭제하기
-                </Button>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <AddComment
+          id={id}
+          userId={userId}
+          setUserId={setUserId}
+          password={password}
+          setPassword={setPassword}
+          commentValue={commentValue}
+          setCommentValue={setCommentValue}
+        />
+        <CommentList id={id} commentList={commentList} />
       </CommentModalStyle>
     </ModalContainerStyle>
   );

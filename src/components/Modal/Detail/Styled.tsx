@@ -28,6 +28,7 @@ export const ModalStyle = styled.div<{ $openComment: boolean; deviceType: string
   align-items: center; */
 
   width: ${(props) => (props.deviceType === 'mobile' ? '100vw' : '40vw')};
+  max-width: 650px;
   flex-shrink: 0;
   height: ${(props) => (props.deviceType === 'mobile' ? '100vh' : 'calc(100vh - 50px)')};
   background-color: rgb(39, 39, 42);
@@ -91,6 +92,7 @@ export const CloseButton = styled.button`
 `;
 
 export const ImageWrapper = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,6 +100,7 @@ export const ImageWrapper = styled.div`
   img {
     max-width: 100%;
     height: auto;
+    max-height: 100%;
     border-radius: 10px;
     margin-bottom: 10px;
   }
@@ -181,6 +184,7 @@ export const ImageWrapper = styled.div`
 
 export const CommentModalStyle = styled.div<{ openComment: boolean; deviceType: string }>`
   width: ${(props) => (props.deviceType === 'mobile' ? '100vw' : '40vw')};
+  max-width: 650px;
   flex-shrink: 0;
   height: ${(props) => (props.deviceType === 'mobile' ? '70vh' : 'calc(100vh - 50px)')};
   background-color: rgb(39, 39, 42);
@@ -330,6 +334,18 @@ export const CommentModalStyle = styled.div<{ openComment: boolean; deviceType: 
       .comment-wrapper {
         display: flex;
         flex-direction: column;
+        width: 100%;
+        textarea {
+          width: 100%;
+          height: 100px;
+          padding: 14px 18px;
+          background: var(--white-color);
+          border: 2px solid var(--skyblue-color);
+          border-radius: 14px;
+          resize: none;
+          outline: none;
+          box-sizing: border-box;
+        }
       }
       .button-box {
         width: 100%;
