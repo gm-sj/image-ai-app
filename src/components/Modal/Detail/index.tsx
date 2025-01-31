@@ -13,6 +13,7 @@ import {
   serverTimestamp,
   doc,
   updateDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../../../firebase/config';
 import { PasswordCheckModal } from '../';
@@ -103,11 +104,14 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
   const [editMode, setEditMode] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>('');
   const tempUserInfo = useRef<TempUserInfo | null>(null);
+  const tempDeleteInfo = useRef<TempUserInfo | null>(null);
+  const flag = useRef<string>('');
 
   const [isPass, setIsPass] = useState(false);
   const { openModal } = useModal();
 
-  const checkPassword = (password: string, userId: string) => {
+  const checkPassword = (password: string, userId: string, flagCheck: string) => {
+    flag.current = flagCheck;
     openModal({
       id: 'PasswordCheckModal',
       component: <PasswordCheckModal password={password} setIsPass={setIsPass} userId={userId} />,
@@ -116,7 +120,7 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
 
   const handleEditClick = (id: string, currentValue: string, password: string, userId: string) => {
     // 비밀번호 확인
-    checkPassword(password, userId);
+    checkPassword(password, userId, 'edit');
     // 임시 유저 정보 저장
     tempUserInfo.current = { id, currentValue };
   };
@@ -148,10 +152,30 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
     }
   };
 
+  /* 삭제 */
+  const handleDeleteClick = (id: string, password: string, userId: string) => {
+    // 비밀번호 확인
+    checkPassword(password, userId, 'delete');
+    // 임시 유저 정보 저장
+    tempDeleteInfo.current = { id, currentValue: '' };
+  };
+
+  const deleteComment = async (commentUserId: string) => {
+    const commentRef = doc(db, `images/${id}/comments`, commentUserId);
+    await deleteDoc(commentRef);
+  };
+
   useEffect(() => {
     // 비밀번호 확인 통과 후 수정모드 변경
-    if (isPass && tempUserInfo.current) {
+    if (isPass && tempUserInfo.current && flag.current !== 'delete') {
       changeEditMode(tempUserInfo.current.id, tempUserInfo.current.currentValue);
+    }
+
+    // 비밀번호 확인 통과 후 삭제
+    if (isPass && tempDeleteInfo.current && flag.current !== 'edit') {
+      deleteComment(tempDeleteInfo.current.id).catch((error) => {
+        console.error('Error deleting: ', error);
+      });
     }
   }, [isPass]);
 
@@ -190,7 +214,11 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
                 >
                   수정하기
                 </Button>
-                <Button color="error" variant="outlined">
+                <Button
+                  color="error"
+                  variant="outlined"
+                  onClick={() => handleDeleteClick(data.id, data.password, data.userId)}
+                >
                   삭제하기
                 </Button>
               </>
