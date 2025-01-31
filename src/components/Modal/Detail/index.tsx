@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ModalContainerStyle, ImageWrapper, ModalStyle, CommentModalStyle } from './Styled';
 import useModal from '../../../hooks/useModal';
 import { Button } from '@mui/material';
@@ -15,6 +15,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from '../../../firebase/config';
+import { PasswordCheckModal } from '../';
 
 interface DetailImageProps {
   id: string;
@@ -33,6 +34,11 @@ interface AddCommentProps {
   setPassword: (value: string) => void;
   commentValue: string;
   setCommentValue: (value: string) => void;
+}
+
+interface TempUserInfo {
+  id: string;
+  currentValue: string;
 }
 
 /* 댓글 추가 */
@@ -96,14 +102,34 @@ const AddComment = ({
 const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) => {
   const [editMode, setEditMode] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>('');
+  const tempUserInfo = useRef<TempUserInfo | null>(null);
 
-  const handleEditClick = (id: string, currentValue: string) => {
+  const [isPass, setIsPass] = useState(false);
+  const { openModal } = useModal();
+
+  const checkPassword = (password: string, userId: string) => {
+    openModal({
+      id: 'PasswordCheckModal',
+      component: <PasswordCheckModal password={password} setIsPass={setIsPass} userId={userId} />,
+    });
+  };
+
+  const handleEditClick = (id: string, currentValue: string, password: string, userId: string) => {
+    // 비밀번호 확인
+    checkPassword(password, userId);
+    // 임시 유저 정보 저장
+    tempUserInfo.current = { id, currentValue };
+  };
+
+  const changeEditMode = (id: string, currentValue: string) => {
     setEditMode(id);
     setEditValue(currentValue);
   };
 
   const handleCancelEdit = () => {
     setEditMode(null);
+    setIsPass(false);
+    tempUserInfo.current = null;
   };
 
   /* 수정 */
@@ -121,6 +147,13 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
       console.error('Error updating document: ', error);
     }
   };
+
+  useEffect(() => {
+    // 비밀번호 확인 통과 후 수정모드 변경
+    if (isPass && tempUserInfo.current) {
+      changeEditMode(tempUserInfo.current.id, tempUserInfo.current.currentValue);
+    }
+  }, [isPass]);
 
   return (
     <ul className="comment-list-wrapper">
@@ -151,7 +184,9 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
               <>
                 <Button
                   variant="contained"
-                  onClick={() => handleEditClick(data.id, data.commentValue)}
+                  onClick={() =>
+                    handleEditClick(data.id, data.commentValue, data.password, data.userId)
+                  }
                 >
                   수정하기
                 </Button>
