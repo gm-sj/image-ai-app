@@ -15,6 +15,7 @@ export const ModalContentStyle = styled.div`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  text-align: center;
   z-index: 5;
   background-color: var(--white-color);
   padding: 20px;

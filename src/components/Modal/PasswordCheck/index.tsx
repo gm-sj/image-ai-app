@@ -11,10 +11,12 @@ const PasswordCheck = ({
   password,
   setIsPass,
   userId,
+  flag,
 }: {
   password: string;
   setIsPass: (isPass: boolean) => void;
   userId: string;
+  flag: React.MutableRefObject<string>;
 }) => {
   const [passwordValue, setPasswordValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,12 +30,14 @@ const PasswordCheck = ({
       closeModal('PasswordCheckModal');
     } else {
       setIsPass(false);
+      flag.current = '';
     }
   };
 
   const handleClose = () => {
     setIsPass(false);
     closeModal('PasswordCheckModal');
+    flag.current = '';
   };
 
   return (

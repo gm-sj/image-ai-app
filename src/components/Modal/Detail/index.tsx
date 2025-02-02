@@ -111,10 +111,14 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
   const { openModal } = useModal();
 
   const checkPassword = (password: string, userId: string, flagCheck: string) => {
-    flag.current = flagCheck;
+    if (flag.current === '') {
+      flag.current = flagCheck;
+    }
     openModal({
       id: 'PasswordCheckModal',
-      component: <PasswordCheckModal password={password} setIsPass={setIsPass} userId={userId} />,
+      component: (
+        <PasswordCheckModal password={password} setIsPass={setIsPass} userId={userId} flag={flag} />
+      ),
     });
   };
 
@@ -134,6 +138,7 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
     setEditMode(null);
     setIsPass(false);
     tempUserInfo.current = null;
+    flag.current = '';
   };
 
   /* 수정 */
@@ -167,15 +172,17 @@ const CommentList = ({ commentList, id }: { commentList: any[]; id: string }) =>
 
   useEffect(() => {
     // 비밀번호 확인 통과 후 수정모드 변경
-    if (isPass && tempUserInfo.current && flag.current !== 'delete') {
+    if (isPass && tempUserInfo.current && flag.current === 'edit') {
       changeEditMode(tempUserInfo.current.id, tempUserInfo.current.currentValue);
+      flag.current = '';
     }
 
     // 비밀번호 확인 통과 후 삭제
-    if (isPass && tempDeleteInfo.current && flag.current !== 'edit') {
+    if (isPass && tempDeleteInfo.current && flag.current === 'delete') {
       deleteComment(tempDeleteInfo.current.id).catch((error) => {
         console.error('Error deleting: ', error);
       });
+      flag.current = '';
     }
   }, [isPass]);
 
