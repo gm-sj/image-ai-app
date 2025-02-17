@@ -13,6 +13,8 @@
 | <img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTscDSszyGFxlaLRB8Aj1A3gfUKy0hCRhCH4g&s" width="225px" height="225px"> | <img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTscDSszyGFxlaLRB8Aj1A3gfUKy0hCRhCH4g&s" width="225px" height="225px"> |
 |                                                  [gyumin](https://github.com/jattett)                                                   |                                                [sungjin](https://github.com/seongjin77)                                                 |
 
+## 🔍 아키텍처
+<img src="https://github.com/user-attachments/assets/c7eca1f7-1a0f-4b2f-a8ff-effba220b8ac" width="600" />
 
 ## 🚀 주요 기능
 
